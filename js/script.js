@@ -30,7 +30,7 @@ function setup()
   disc_cvs = createGraphics(imgs.A_width/scaling, imgs.A_height/scaling);
   new Canvas(imgs.A_width/scaling, imgs.A_height/scaling);
   //new Canvas(100,100);
-  background(255);
+  background("red");
 
   img_names.forEach( name =>{
     pixels[name] = getPixels(imgs[name]);
@@ -38,7 +38,28 @@ function setup()
     //drawDisc(name);
   });
 
+
+  
+
+  // Replace color ids with their current closest match,
+  // cause browsers (Chrome, Edge, not Firefox) might distort them a little
+  Object.keys(color2cell.A).forEach(original_color_name => {
+    var closest_match = getClosestColor(original_color_name.split("-"), palettes.A_cells);
+    //console.log(original_color_name, closest_match, color2cell.A[original_color_name])
+    color2cell.A[closest_match] = color2cell.A[original_color_name];
+  });
+
+  Object.keys(color2symbol).forEach(original_color_name => {
+    var closest_match = getClosestColor(original_color_name.split("-"), palettes.A_symbols);
+    //console.log(original_color_name, closest_match, color2symbol[original_color_name])
+    color2symbol[closest_match] = color2symbol[original_color_name];
+  });
+  
+
+
   //drawDisc("A_disc");
+  //drawDisc("A_cells");
+
   info = createDiv('== INFO ==');
   info.position(10, 10);
 
@@ -48,14 +69,13 @@ function setup()
   pawns = new Group();
   pawns.radius = 10;
   pawns.color = "red";
-
 }
 
 function draw()
 {
-  background("white")
-  //drawDisc();
+  background("blue")
   image(disc_cvs, 0, 0);
+  //image(imgs.A_disc, 0, 0);
 
   pawns.forEach(pawn=> pawn.direction = pawn.angleTo(100,100));
 }
@@ -89,12 +109,12 @@ function mouseMoved() // have to be detected another way
   var x = Math.floor(mouseX*scaling),
   y = Math.floor(mouseY*scaling);
   var semantic = coordToSymbols(x,y)
-
   
   if(semantic.cell > -1)
   {
     disc_cvs.background(255);
     drawDisc("A_disc")
+    //drawDisc("A_cells")
     var c = color("blue")
     c.setAlpha(50);
     colorCell(semantic.cell, c);

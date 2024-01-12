@@ -41,10 +41,21 @@ function countColors(imgData) // count colors in a pixel array
 
 
   
-function getClosestColor(c_rgba, palette)
+function getClosestColor(colorToCheck, palette)
 {
 
-    var colorName = `${c_rgba[0]}-${c_rgba[1]}-${c_rgba[2]}-${c_rgba[3]}`;
+    var colorName, c_rgba;
+    if(typeof colorToCheck == "string")
+    {
+      colorName = colorToCheck;
+      c_rgba = colorToCheck.split("-").map(character => character*1);
+    }
+    else if(typeof colorToCheck == "object")
+    {
+      colorName = `${colorToCheck[0]}-${colorToCheck[1]}-${colorToCheck[2]}-${colorToCheck[3]}`;
+      c_rgba = colorToCheck
+    }
+    
     if(colorName in palette) return colorName;
 
     var distances = [];
@@ -52,18 +63,19 @@ function getClosestColor(c_rgba, palette)
     var closest_color = false;
     for(var name in palette)
     {
-        var p_rgba = name.split("-");
+        var p_rgba = name.split("-").map(character => character*1);;
         var distance = 0;
         for(var i = 0; i < 4; i++)
         {
             distance += abs(p_rgba[i]-c_rgba[i]);
-            if(minimal_distance == -1 || distance < minimal_distance)
-            {
-                minimal_distance = distance;
-                closest_color    = name; 
-            }
+        }
+        if(minimal_distance == -1 || distance < minimal_distance)
+        {
+            minimal_distance = distance;
+            closest_color    = name; 
         }
     }
+    console.log(colorName,closest_color, distance)
     return closest_color;
 }
 
@@ -203,7 +215,9 @@ function coordToSymbols(x, y, disc = "A")
 {
     var cell_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_cells"]), palettes[disc+"_cells"]);
     var symbol_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_symbols"]), palettes[disc+"_symbols"]);
+     
     
+
     var cell = color2cell[disc][cell_color] ?? -1;
     var symbol = color2symbol[symbol_color];
 
