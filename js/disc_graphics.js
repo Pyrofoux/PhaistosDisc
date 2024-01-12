@@ -216,7 +216,9 @@ function coordToSymbols(x, y, disc = "A")
     var cell_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_cells"]), palettes[disc+"_cells"]);
     var symbol_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_symbols"]), palettes[disc+"_symbols"]);
      
-    
+    /* var cell_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_cells"]), color2cell[disc]);
+    var symbol_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_symbols"]), color2symbol);
+      */
 
     var cell = color2cell[disc][cell_color] ?? -1;
     var symbol = color2symbol[symbol_color];
