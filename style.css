@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color:black;
+  color:white;
+  
+}
+canvas
+{
+}
+
+main
+{
+  width:50%;
+  display:block;
+  margin:auto;
+  text-align:center;
+  position: relative;
+  top: 50%;
+  transform: translateY(0%);
+}
+
+.hidden
+{
+  display:none;
+}
