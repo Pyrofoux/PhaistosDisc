@@ -1,4 +1,10 @@
 
+const COLORS = {
+    DEFAULT_TEXT_COLOR:"#827158",
+    DEFAULT_TEXT_BGCOLOR:"#FEFBE5",
+    DESIGNER_TEXT_COLOR: "#7444A7",
+    ARCHEO_TEXT_COLOR: "#AA7534"
+}
 
 // built manually using coordToSymbols() and clicking on the canvas
 const color2cell = {

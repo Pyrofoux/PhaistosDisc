@@ -32,7 +32,7 @@ function countColors(imgData) // count colors in a pixel array
     }
   }
   }
-  // process to filter in between pixels that exist because of scaling
+  // process to filter in between pixels that exist because of disc_scaling
   // the number 100 was choosen by checking the numbers and knowing its adapted to our context
   Object.keys(set).forEach(color => set[color] < 100 ? delete set[color] : true);
 
@@ -75,12 +75,11 @@ function getClosestColor(colorToCheck, palette)
             closest_color    = name; 
         }
     }
-    console.log(colorName,closest_color, distance)
     return closest_color;
 }
 
 let colored_regions = {};
-function colorCell(cell = 0, col = color("red"), disc = "A", scale = 3)
+function colorCell(cell = 0, col = color("red"), disc = "A", scale = disc_scaling)
 {
   var center = cell_centers[cell];
   if(!center) return false;
@@ -104,11 +103,11 @@ function colorCell(cell = 0, col = color("red"), disc = "A", scale = 3)
   disc_cvs.push();
   disc_cvs.tint(col);
   // scale is *2 for width / height, idk why but I think t has to do with the p5js canvas
-  disc_cvs.image(region, region._start_x/scale, region._start_y/scale, region._width/scale*2, region._height/scale*2);
+  disc_cvs.image(region, region._start_x/scale, region._start_y/scale, region._width/scale*pixel_density, region._height/scale*pixel_density);
   disc_cvs.pop();
 }
 
-function colorSymbol(cell, symbol, col = color("red"), scale = 3, disc= "A")
+function colorSymbol(cell, symbol, col = color("red"), scale = disc_scaling, disc= "A")
 {
   var points = cell2symbol[cell];
   var center = null;
@@ -142,8 +141,14 @@ function colorSymbol(cell, symbol, col = color("red"), scale = 3, disc= "A")
   disc_cvs.push();
   disc_cvs.tint(col);
   // scale is *2 for width / height, idk why but I think t has to do with the p5js canvas
-  disc_cvs.image(region, region._start_x/scale, region._start_y/scale, region._width/scale*2, region._height/scale*2);
+  disc_cvs.image(region, region._start_x/scale, region._start_y/scale, region._width/scale*pixel_density, region._height/scale*pixel_density);
   disc_cvs.pop();
+}
+
+function drawDisc(which = "A_disc", x= 0, y = 0, scale = disc_scaling)
+{
+  var img = disc_imgs[which];
+  disc_cvs.image(img, x, y, A_width/scale, A_height/scale);
 }
 
 function coloredRegion(opt)
@@ -152,15 +157,15 @@ function coloredRegion(opt)
   var
   center_x = opt.center_x ?? 0,
   center_y = opt.center_y ?? 0,
-  width = opt.width ?? imgs.A_width, // would have to change for B
-  height = opt.height ?? imgs.A_height,
+  width = opt.width ?? A_width, // would have to change for B
+  height = opt.height ?? A_height,
   disc = opt.disc ?? "A",
   symbol = opt.symbol ?? null,
   cell = opt.cell ?? null,
   lines = opt.lines ?? null;
 
-  var disc_width = imgs[`${disc}_disc`].width;
-  var disc_height = imgs[`${disc}_disc`].height;
+  var disc_width = disc_imgs[`${disc}_disc`].width;
+  var disc_height = disc_imgs[`${disc}_disc`].height;
   
   var start_x = constrain(center_x-width/2, 0, disc_width);
   var start_y = constrain(center_y-height/2, 0, disc_height);
@@ -172,9 +177,9 @@ function coloredRegion(opt)
 
   var crop = (img) => img.drawingContext.getImageData(start_x, start_y, width, height);
 
-  var cellImg   = cell != null ?  crop(imgs[`${disc}_cells`]) : null,
-      symbolImg = symbol != null ?  crop(imgs[`${disc}_symbols`]) : null,
-      discImg = crop(imgs[`${disc}_disc`]);
+  var cellImg   = cell != null ?  crop(disc_imgs[`${disc}_cells`]) : null,
+      symbolImg = symbol != null ?  crop(disc_imgs[`${disc}_symbols`]) : null,
+      discImg = crop(disc_imgs[`${disc}_disc`]);
 
 
 
@@ -211,14 +216,12 @@ function coloredRegion(opt)
 }
 
 
-function coordToSymbols(x, y, disc = "A")
+function coordToSymbols(_x, _y, disc = "A")
 {
+    var x = Math.floor(_x), y = Math.floor(_y);
+
     var cell_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_cells"]), palettes[disc+"_cells"]);
     var symbol_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_symbols"]), palettes[disc+"_symbols"]);
-     
-    /* var cell_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_cells"]), color2cell[disc]);
-    var symbol_color = getClosestColor(getColorIndices(x,y,pixels[disc+"_symbols"]), color2symbol);
-      */
 
     var cell = color2cell[disc][cell_color] ?? -1;
     var symbol = color2symbol[symbol_color];
@@ -229,8 +232,8 @@ function coordToSymbols(x, y, disc = "A")
 ///// Used when labeling data -- remove "ForLabeling" in function name
 function mouseClickedForLabeling()
 {
-  var x = Math.floor(mouseX*scaling),
-  y = Math.floor(mouseY*scaling);
+  var x = Math.floor(mouseX*disc_scaling),
+  y = Math.floor(mouseY*disc_scaling);
   var semantic = coordToSymbols(x,y)
 
   console.log(semantic, x, y);

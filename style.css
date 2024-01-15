@@ -1,26 +1,125 @@
+@font-face {
+  font-family: "Humming";
+  src:
+    url("humming.otf") format("opentype"),
+}
+
+
 body {
   margin: 0;
   padding: 0;
   background-color:black;
   color:white;
+  overflow: scroll;
   
 }
+
 canvas
 {
 }
 
-main
+#screen_container
 {
   width:50%;
   display:block;
   margin:auto;
-  text-align:center;
+  /* text-align:center; */
   position: relative;
-  top: 50%;
   transform: translateY(0%);
 }
 
 .hidden
 {
   display:none;
+}
+
+.textbox
+{
+  background-color:#FEFBE5;
+  color:#827158;
+  text-align:left;
+  margin:auto;
+  font-family:"Humming";
+  font-size: calc(1vw + 1vh + 0.5vmin); /*Text size that depends on container size. Tweak numbers by keeping the 2/2/1 ratio*/
+  box-sizing: border-box;
+  /* border: solid 0.2em #AA7534; */
+  border-radius: 0.8em;
+  padding: 0.2em;
+  padding-left:   0.6em;
+  padding-right:  0.6em;
+  hyphens: auto;
+}
+
+.textbox_arrow
+{
+    border-left: 1.5vw solid transparent;
+    border-right: 1.5vw solid transparent;
+    border-bottom: 1.5vw solid #FEFBE5;
+}
+
+.archeo_portrait
+{
+  transition: 0.5s;
+  transition-property: transform;
+  filter: invert(75%) sepia(31%) saturate(924%) hue-rotate(338deg) brightness(98%) contrast(102%);
+}
+
+.designer_portrait
+{
+  transition: 0.5s;
+  transition-property: transform;
+  filter: invert(77%) sepia(13%) saturate(1084%) hue-rotate(222deg) brightness(96%) contrast(102%);
+}
+
+.inactive_portrait.designer_portrait
+{
+  transform: scale(0.9);
+  filter: invert(54%) sepia(0%) saturate(36%) hue-rotate(136deg) brightness(93%) contrast(85%);
+}
+
+.inactive_portrait.archeo_portrait
+{
+  transform: scale(0.9);
+  filter: invert(54%) sepia(0%) saturate(36%) hue-rotate(136deg) brightness(93%) contrast(85%);
+}
+
+.choice_button
+{
+  width:100%;
+  border:none;
+  color: inherit;
+  font-family:inherit;
+  font-size:inherit;
+  background-color:transparent;
+  text-align:left;
+  border-radius:0.8em;
+  padding-left:0.4em;
+}
+
+.choice_button:hover
+{
+  cursor:pointer;
+  background-color:rgb(0,0,0, 0.15);
+}
+
+.choice_archeo
+{
+  color:#AA7534;
+}
+
+.choice_archeo:hover
+{
+  background-color:#AA7534;
+  color:white;
+}
+
+.choice_designer
+{
+  color:#7444A7;
+}
+
+.choice_designer:hover
+{
+  background-color:#7444A7;
+  color:white;
 }
