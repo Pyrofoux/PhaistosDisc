@@ -21,10 +21,13 @@ class Textbox extends HTMLSprite
         this.speak_timer;
         this.speak_html;
         this.speak_current_char = 0;
-        this.speaking_promise_resolve;
-        this.skip_promise_resolve;
         this.done_speaking = true;
         this.speak_sound;
+
+        //promises
+        this.speaking_promise_resolve;
+        this.skip_promise_resolve;
+        this.choice_promise_resolve;
         
     }
 
@@ -85,7 +88,9 @@ class Textbox extends HTMLSprite
     }
 
     choice(choice1, choice2)
-    { // choice = [html, {variables},  {values}]
+    {
+        return new Promise((resolve) =>{
+        this.choice_promise_resolve = resolve;
         this.clear();
         this.setStyle("CHOICE");
         let makeChoice= (choice)=>{
@@ -108,11 +113,12 @@ class Textbox extends HTMLSprite
             button.mouseOver(hoverChoice);
             button.mouseClicked(clickChoice);
             button.mouseOut(outChoice);
-            button.elt.speaker = choice.speaker;
+            button.elt.dataset.speaker = choice.speaker;
+            button.elt.dataset.choice = JSON.stringify(choice);
         }
 
         let hoverChoice = (e)=>{
-            var speaker = e.target.speaker;
+            var speaker = e.target.dataset.speaker;
             if(speaker == "Plumed Head")
             {
                 this.setStyle("ARCHEO");
@@ -124,7 +130,9 @@ class Textbox extends HTMLSprite
         };
 
         let clickChoice = (e)=>{
-            console.log(this,e)
+           e.stopPropagation();
+           var choice = JSON.parse(e.target.dataset.choice)
+           this.choice_promise_resolve(choice);
         };
 
         let outChoice = (e)=>{
@@ -134,6 +142,7 @@ class Textbox extends HTMLSprite
         makeChoice(choice1);
         this.elt.appendChild(document.createElement("br"));
         makeChoice(choice2);
+        });
     }
 
     pressSkip()

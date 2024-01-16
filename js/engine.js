@@ -68,7 +68,7 @@ async function setup()
   });
 
   // Other HTML elements
-  info = createDiv('== INFO ==');
+  info = createDiv('== DEBUG INFO ==');
   info.position(10, 10);
 
   hidden = createDiv().id("hidden");
@@ -91,7 +91,7 @@ async function setup()
 
   await loadAllSheets();
   playScene("OPENING_DISCUSSION")
-  //playScene("DEBUG_SCENE")
+  //playScene("DISCUSSION_EXAMPLE")
 }
 
 function draw()
@@ -122,69 +122,5 @@ function changeScreen(destination_screen)
 
 function windowResized() {
   all_html_sprites.forEach(sprite => sprite.adjust());
-}
-
-
-
-async function playScene(scene_name)
-{
-  //var sheet = sheets["Conversation 0"];
-  var sheet = big_sheet;
-  console.log(sheet)
-  var current_index = 0;
-  for(var i = 0; i < sheet.length; i++)
-  {
-    var line = sheet[i];
-    if(line["Dialogue Type"] == "SCENE_START" && line["Dialogue"] == scene_name)
-    {
-      current_index = i; // found starting index of the scene
-      break;
-    }
-  }
-
-  current_index++; // read line under scene declaration
-
-  let processLine = async (index) => {
-    var line = sheet[index];
-
-    switch(line["Dialogue Type"])
-    {
-      default: // Dialogue text
-        var character = line["Character"];
-        var styles = {
-          "Plumed Head": "ARCHEO",
-          "Plumed": "ARCHEO",
-          "Tattoo":"DESIGNER",
-        };
-
-        var text = line["Dialogue"].trim();
-        console.log("text",text)
-        if(text != "") // empty row => skip it
-        {
-          await textbox.dialogue(text, styles[character]);
-        }
-        processLine(index+1);
-      break;
-
-      case "CHOICE_A":
-      case "CHOICE_B":
-        var line1 = line, line2 = sheet[index+1]; // might cause error if it doesn't exist
-
-        var parseChoice = (line) =>
-        {
-          var choice = {};
-          choice.html = line["Dialogue"];
-          choice.speaker = line["Character"];
-          //choice.variables 
-          return choice;
-        }
-        await textbox.choice(parseChoice(line1), parseChoice(line2));
-      break;
-
-    }
-  }
-
-  await processLine(current_index, sheet);
-
 }
 

@@ -19,6 +19,9 @@ class HTMLSprite
         var sw = main_cvs.elt.clientWidth,
         sh = main_cvs.elt.clientHeight;
 
+        /* sw = main_cvs.width;
+        sy = main_cvs.width; */
+
         var w = this._w == AUTO ? AUTO : this._w * sw;
         var h = this._h == AUTO ? AUTO : this._h * sh;
 
@@ -28,11 +31,10 @@ class HTMLSprite
 
     reposition(x,y,w,h) // set in percentage of the current screen. can use the AUTO p5 const
     {
-        this._x = x/100 ?? this._x;
-        this._y = y/100 ?? this._y;
-        console.log(this._y)
-        this._w = (w == AUTO ? AUTO : w/100) ?? this._w;
-        this._h = (h == AUTO ? AUTO : h/100) ?? this._h;
+        this._x = x/100 || this._x;
+        this._y = y/100 || this._y;
+        this._w = (w == AUTO ? AUTO : w/100) || this._w;
+        this._h = (h == AUTO ? AUTO : h/100) || this._h;
         this.adjust();
     }
 }

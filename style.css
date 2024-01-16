@@ -71,17 +71,13 @@ canvas
   filter: invert(77%) sepia(13%) saturate(1084%) hue-rotate(222deg) brightness(96%) contrast(102%);
 }
 
-.inactive_portrait.designer_portrait
+.inactive_portrait
 {
   transform: scale(0.9);
+  /*grey*/
   filter: invert(54%) sepia(0%) saturate(36%) hue-rotate(136deg) brightness(93%) contrast(85%);
 }
 
-.inactive_portrait.archeo_portrait
-{
-  transform: scale(0.9);
-  filter: invert(54%) sepia(0%) saturate(36%) hue-rotate(136deg) brightness(93%) contrast(85%);
-}
 
 .choice_button
 {
@@ -122,4 +118,36 @@ canvas
 {
   background-color:#7444A7;
   color:white;
+}
+
+.discussion_token
+{
+  filter: invert(54%) sepia(0%) saturate(36%) hue-rotate(136deg) brightness(93%) contrast(85%);
+}
+
+.discussion_token_gained
+{
+  animation: discussion_token_add 1s;
+}
+
+@keyframes discussion_token_add {
+  50%{
+    transform: scale(2) rotate(0deg);
+  }
+}
+
+
+.orange_svg
+{
+  filter: invert(75%) sepia(31%) saturate(924%) hue-rotate(338deg) brightness(98%) contrast(102%);
+}
+
+.grey_svg
+{
+  filter: invert(54%) sepia(0%) saturate(36%) hue-rotate(136deg) brightness(93%) contrast(85%);
+}
+
+.purple_svg
+{
+  filter: invert(77%) sepia(13%) saturate(1084%) hue-rotate(222deg) brightness(96%) contrast(102%);
 }

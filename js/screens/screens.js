@@ -6,35 +6,17 @@ class Screen
         this.init();
     }
 
-    init()
-    {
+    init(){}
 
-    }
+    draw(){}
 
-    draw()
-    {
+    onEnter(){}
 
-    }
+    onLeave(){}
 
-    onEnter()
-    {
+    onClick(){}
 
-    }
-
-    onLeave()
-    {
-
-    }
-
-    onClick()
-    {
-
-    }
-
-    onMouseMove()
-    {
-        
-    }
+    onMouseMove(){}
 
 }
 
@@ -114,27 +96,5 @@ class DemoScreen extends Screen
             }
 
         }
-    }
-}
-
-
-class ConvoScreen extends Screen
-{
-
-    init()
-    {
-        this.heads = {};
-        this.heads.plumed = new HTMLSpriteImg("img/PLUMED_HEAD.svg", 3, 58, 15, AUTO, 24 ,30);
-        let plumed = this.heads.plumed;
-        plumed.box.class("archeo_portrait");
-
-        this.heads.tattoo = new HTMLSpriteImg("img/TATTOOED_HEAD.svg", 83, 60, 12, AUTO, 23 ,32);
-        let tattoo = this.heads.tattoo;
-        tattoo.box.class("designer_portrait");
-    }
-
-    draw()
-    {
-        background("#212121");
     }
 }
