@@ -15,6 +15,7 @@ async function playScene(scene_name)
   }
 
   current_index++; // read line under scene declaration
+  console.log("will read index", current_index, sheet[current_index]);
 
   let processLine = async (index) => {
     var line = sheet[index];
@@ -128,7 +129,7 @@ async function playScene(scene_name)
     }
   }
 
-  await processLine(current_index, sheet);
+  await processLine(current_index);
 
 }
 

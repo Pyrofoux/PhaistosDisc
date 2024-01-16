@@ -17,7 +17,26 @@ async function loadAllSheets()
     {
         var sheet_name = sheet_names[i];
         var csv_string  = await fetchSheetCSV(sheet_name);
-        var sheet = Papa.parse(csv_string, {header:true}).data; //uses papaparse.min.js from github.com/mholt/PapaParse
+        var pure_sheet = Papa.parse(csv_string).data; //uses papaparse.min.js from github.com/mholt/PapaParse
+        
+        var sheet = [];
+        // Uses row 0 as headers. the config option {headers:true} of paparse is bugged. consider changing csv parsing lib
+        if(pure_sheet.length > 0)
+        {
+        for(var i = 1; i < pure_sheet.length; i++)
+        {
+            var line = {};
+            pure_sheet[0].forEach((column_name, index) =>{
+                if(column_name)
+                {
+                    line[column_name] = pure_sheet[i][index];
+                }
+            });
+            sheet.push(line);
+        }
+        }
+        
+        
         sheets[sheet_name] = sheet;
         // merge all sheets into a single one
         big_sheet = big_sheet.concat(sheet);
