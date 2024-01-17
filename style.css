@@ -41,6 +41,7 @@ canvas
   margin:auto;
   font-family:"Humming";
   font-size: calc(1vw + 1vh + 0.5vmin); /*Text size that depends on container size. Tweak numbers by keeping the 2/2/1 ratio*/
+  line-height: 1.5em;
   box-sizing: border-box;
   /* border: solid 0.2em #AA7534; */
   border-radius: 0.8em;

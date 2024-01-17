@@ -10,6 +10,7 @@ async function fetchSheetCSV(sheet_name = "")
 const sheet_names = ["Conversation 0","Conversation A","Conversation B","Conversation C", "Example"]; 
 let sheets = {};
 let big_sheet = [];
+let all_scenes = [];
 async function loadAllSheets()
 {
     // collact all sheets
@@ -41,6 +42,22 @@ async function loadAllSheets()
         // merge all sheets into a single one
         big_sheet = big_sheet.concat(sheet);
     }
+
+    all_scenes = gatherScenes(big_sheet);
+}
+
+function gatherScenes(sheet)
+{
+    var scenes = {};
+    for(var index = 0; index < sheet.length; index++)
+    {
+        var line = sheet[index];
+        if(line["Dialogue Type"] == "SCENE_START")
+        {
+            scenes[line["Dialogue"]] = index;
+        }
+    }
+    return scenes;
 }
 
 // Todo later: load local .csv files, using Paparse's download config

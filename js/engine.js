@@ -8,7 +8,8 @@ let main_cvs, disc_cvs, textbox;
 let info, hidden;
 
 
-const img_names = ["A_disc", "A_cells", "A_symbols"];
+//const img_names = ["A_disc", "A_cells", "A_symbols"];
+const img_names = [];
 const A_width = 1883;
 const A_height = 1929
 
@@ -25,9 +26,9 @@ async function preload()
   sounds.letter = loadSound("audio/letter.mp3");
   sounds.blip_m = loadSound("audio/blip_m.wav");
   sounds.blip_f = loadSound("audio/blip_f.wav");
-
+  sounds.choice_made = loadSound("audio/choice_made.wav");
   Object.values(sounds).forEach(sound => sound.setVolume(0.5));
-
+  sounds.choice_made.setVolume(1);
   spr.symbols = {};
   spr.symbols["PLUMED_HEAD"]   = loadImage("img/PLUMED_HEAD.svg");
   spr.symbols["TATTOOED_HEAD"] = loadImage("img/TATTOOED_HEAD.svg");
@@ -50,12 +51,12 @@ async function setup()
   main_cvs.parent("screen_container");
   console.log("canvas dims",screen_width, screen_height);
 
-  // loading disc images pixels
+  /* // loading disc images pixels
   img_names.forEach( name =>{
     pixels[name] = getPixels(disc_imgs[name]);
     palettes[name] = countColors(pixels[name]);
   });
-
+ 
   // Replace color ids with their current closest match,
   // cause browsers (Chrome, Edge, not Firefox) might distort them a little
   Object.keys(color2cell.A).forEach(original_color_name => {
@@ -65,10 +66,10 @@ async function setup()
   Object.keys(color2symbol).forEach(original_color_name => {
     var closest_match = getClosestColor(original_color_name.split("-"), palettes.A_symbols);
     color2symbol[closest_match] = color2symbol[original_color_name];
-  });
+  }); */
 
   // Other HTML elements
-  info = createDiv('== DEBUG INFO ==');
+  info = createDiv('== DEBUG TOOLS ==');
   info.position(10, 10);
 
   hidden = createDiv().id("hidden");
@@ -90,8 +91,23 @@ async function setup()
   //await textbox.write("Hello! Let's see what happens if we make it realistic, you know?");
 
   await loadAllSheets();
-  playScene("OPENING_DISCUSSION")
-  //playScene("DISCUSSION_EXAMPLE")
+  //playScene("OPENING_DISCUSSION")
+  //playScene("DEBUG_SCENE")
+  playScene("DISCUSSION_EXAMPLE");
+
+  for(var scene_name in all_scenes)
+  {
+    info.child(createElement("br"));
+    
+    var link = document.createElement("a");
+    link.href="#";
+    link.innerHTML = scene_name;
+    link.dataset.scene_name = scene_name
+    link.onclick = function(e){ playScene(e.target.dataset.scene_name)};
+    info.child(link);
+    console.log(link, scene_name)
+  }
+
 }
 
 function draw()

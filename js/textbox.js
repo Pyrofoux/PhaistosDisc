@@ -16,6 +16,7 @@ class Textbox extends HTMLSprite
         this.arrow.box.addClass("hidden");
         // settings
         this.speak_interval = 50; // millis
+        this.choice_delay = 300;
 
         // internal variables
         this.speak_timer;
@@ -95,7 +96,7 @@ class Textbox extends HTMLSprite
         this.setStyle("CHOICE");
         let makeChoice= (choice)=>{
             var button = createElement("button");
-            button.html(choice.html);
+            button.html(`▶ ${choice.html}`);
             button.parent(this.box);
             button.addClass("choice_button");
 
@@ -108,13 +109,16 @@ class Textbox extends HTMLSprite
                 button.addClass("choice_designer");
             }
             
-
-
-            button.mouseOver(hoverChoice);
-            button.mouseClicked(clickChoice);
-            button.mouseOut(outChoice);
             button.elt.dataset.speaker = choice.speaker;
             button.elt.dataset.choice = JSON.stringify(choice);
+
+            button.mouseOut(outChoice);
+            button.mouseOver(hoverChoice);
+            // Delay when presenting choices, to prevent button mashing that skips choice
+            setTimeout(()=>{
+                button.mouseClicked(clickChoice);
+            }, this.choice_delay);
+           
         }
 
         let hoverChoice = (e)=>{
@@ -133,10 +137,11 @@ class Textbox extends HTMLSprite
            e.stopPropagation();
            var choice = JSON.parse(e.target.dataset.choice)
            this.choice_promise_resolve(choice);
+           sounds.choice_made.play();
         };
 
         let outChoice = (e)=>{
-            this.moveArrow("none");
+            this.setStyle("none");
         };
 
         makeChoice(choice1);
@@ -178,6 +183,8 @@ class Textbox extends HTMLSprite
             break;
 
             default:
+                screens.convo.heads.plumed.box.addClass("inactive_portrait");
+                screens.convo.heads.tattoo.box.addClass("inactive_portrait");
                 this.box.style("color",COLORS.DEFAULT_TEXT_COLOR);
                 this.speak_sound = sounds.letter;
                 this.moveArrow("none");
