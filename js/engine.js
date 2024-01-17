@@ -27,8 +27,11 @@ async function preload()
   sounds.blip_m = loadSound("audio/blip_m.wav");
   sounds.blip_f = loadSound("audio/blip_f.wav");
   sounds.choice_made = loadSound("audio/choice_made.wav");
+  sounds.select = loadSound("audio/select.wav");
   Object.values(sounds).forEach(sound => sound.setVolume(0.5));
   sounds.choice_made.setVolume(1);
+
+
   spr.symbols = {};
   spr.symbols["PLUMED_HEAD"]   = loadImage("img/PLUMED_HEAD.svg");
   spr.symbols["TATTOOED_HEAD"] = loadImage("img/TATTOOED_HEAD.svg");
@@ -91,9 +94,9 @@ async function setup()
   //await textbox.write("Hello! Let's see what happens if we make it realistic, you know?");
 
   await loadAllSheets();
-  //playScene("OPENING_DISCUSSION")
+  playScene("OPENING_DISCUSSION")
   //playScene("DEBUG_SCENE")
-  playScene("DISCUSSION_EXAMPLE");
+  //playScene("DISCUSSION_EXAMPLE");
 
   for(var scene_name in all_scenes)
   {

@@ -122,6 +122,7 @@ class Textbox extends HTMLSprite
         }
 
         let hoverChoice = (e)=>{
+            sounds.select.play();
             var speaker = e.target.dataset.speaker;
             if(speaker == "Plumed Head")
             {
