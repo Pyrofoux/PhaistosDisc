@@ -10,12 +10,13 @@ body {
   padding: 0;
   background-color:black;
   color:white;
-  overflow: scroll;
+  overflow: hidden;
   
 }
 
 canvas
 {
+  z-index:0;
 }
 
 #screen_container
@@ -35,6 +36,8 @@ canvas
 
 .textbox
 {
+  z-index:2;
+
   background-color:#FEFBE5;
   color:#827158;
   text-align:left;
@@ -53,6 +56,7 @@ canvas
 
 .textbox_arrow
 {
+    z-index:1;
     border-left: 1.5vw solid transparent;
     border-right: 1.5vw solid transparent;
     border-bottom: 1.5vw solid #FEFBE5;
@@ -60,6 +64,7 @@ canvas
 
 .archeo_portrait
 {
+  z-index:2;
   transition: 0.5s;
   transition-property: transform;
   filter: invert(75%) sepia(31%) saturate(924%) hue-rotate(338deg) brightness(98%) contrast(102%);
@@ -67,6 +72,7 @@ canvas
 
 .designer_portrait
 {
+  z-index:2;
   transition: 0.5s;
   transition-property: transform;
   filter: invert(77%) sepia(13%) saturate(1084%) hue-rotate(222deg) brightness(96%) contrast(102%);
@@ -123,6 +129,7 @@ canvas
 
 .discussion_token
 {
+  z-index:3;
   filter: invert(54%) sepia(0%) saturate(36%) hue-rotate(136deg) brightness(93%) contrast(85%);
 }
 

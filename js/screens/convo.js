@@ -4,11 +4,13 @@ class ConvoScreen extends Screen
     init()
     {
         this.heads = {};
-        this.heads.plumed = new HTMLSpriteImg("img/PLUMED_HEAD.svg", 3, 58, 15, AUTO, 24 ,30); // last two numbers are from the file data on wikipedia: width, height
+        //this.heads.plumed = new HTMLSpriteImg("img/PLUMED_HEAD.svg", 3, 58, 15, AUTO, 24 ,30); // last two numbers are from the file data on wikipedia: width, height
+        this.heads.plumed = new HTMLSpriteImg("img/PLUMED_HEAD.svg", 3, 63, 12, AUTO, 24 ,30); // last two numbers are from the file data on wikipedia: width, height
         let plumed = this.heads.plumed;
         plumed.box.class("archeo_portrait");
 
-        this.heads.tattoo = new HTMLSpriteImg("img/TATTOOED_HEAD.svg", 83, 60, 12, AUTO, 23 ,32);
+        //this.heads.tattoo = new HTMLSpriteImg("img/TATTOOED_HEAD.svg", 83, 60, 12, AUTO, 23 ,32);
+        this.heads.tattoo = new HTMLSpriteImg("img/TATTOOED_HEAD.svg", 83, 64, 10, AUTO, 23 ,32);
         let tattoo = this.heads.tattoo;
         tattoo.box.class("designer_portrait");
 
@@ -39,8 +41,9 @@ class ConvoScreen extends Screen
         this.rosette_count++;
     }
 
-    draw()
+    draw(sw,sh)
     {
-        background("#212121");
+        super.draw()
+        //background("#212121");
     }
 }

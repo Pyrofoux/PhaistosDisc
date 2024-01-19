@@ -22,21 +22,28 @@ let sounds = {}, spr = {};
 
 async function preload()
 {
+  // disc labeled layers
   img_names.forEach(name => disc_imgs[name] = loadImage(`img/${name}.png`));
+  spr.symbols = {}; // svg symbols
+  spr.symbols["PLUMED_HEAD"]   = loadImage("img/PLUMED_HEAD.svg");
+  spr.symbols["TATTOOED_HEAD"] = loadImage("img/TATTOOED_HEAD.svg");
+
+  spr.slides = {}; // slide pictures
+  spr.slides.blank_bg = loadImage("img/blank_slide_bg.png");
+  spr.slides.blank_front = loadImage("img/blank_slide_front.png");
+  spr.slides.blank = loadImage("img/blank_slide.png");
+  spr.slides.disc = loadImage("img/slide_disc.png");
+  spr.slides.palace_map = loadImage("img/palace_plan.jpg");
+
+  // sounds
   sounds.letter = loadSound("audio/letter.mp3");
   sounds.blip_m = loadSound("audio/blip_m.wav");
   sounds.blip_f = loadSound("audio/blip_f.wav");
   sounds.choice_made = loadSound("audio/choice_made.wav");
   sounds.select = loadSound("audio/select.wav");
+  sounds.slide = loadSound("audio/slideshow_button.wav");
   Object.values(sounds).forEach(sound => sound.setVolume(0.5));
   sounds.choice_made.setVolume(1);
-
-
-  spr.symbols = {};
-  spr.symbols["PLUMED_HEAD"]   = loadImage("img/PLUMED_HEAD.svg");
-  spr.symbols["TATTOOED_HEAD"] = loadImage("img/TATTOOED_HEAD.svg");
-
-  console.log(sheets);
 }
 
 async function setup()
@@ -89,24 +96,25 @@ async function setup()
   }
 
   changeScreen(screens.convo);
-
-  // https://eev.ee/blog/2016/10/20/word-wrapping-dialogue/
-  //await textbox.write("Hello! Let's see what happens if we make it realistic, you know?");
-
+  
   await loadAllSheets();
   playScene("OPENING_DISCUSSION")
   //playScene("DEBUG_SCENE")
   //playScene("DISCUSSION_EXAMPLE");
 
+  
+  // debug scenes
   for(var scene_name in all_scenes)
   {
     info.child(createElement("br"));
-    
     var link = document.createElement("a");
     link.href="#";
     link.innerHTML = scene_name;
     link.dataset.scene_name = scene_name
-    link.onclick = function(e){ playScene(e.target.dataset.scene_name)};
+    link.onclick = function(e){
+      textbox.skip();
+      playScene(e.target.dataset.scene_name)
+    };
     info.child(link);
     console.log(link, scene_name)
   }
@@ -115,7 +123,9 @@ async function setup()
 
 function draw()
 {
-  screen.draw();
+  screen.preDraw(screen_width, screen_height);
+  screen.draw(screen_width, screen_height);
+  screen.postDraw(screen_width, screen_height);
 }
 
 function mouseClicked()

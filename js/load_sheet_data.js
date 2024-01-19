@@ -7,7 +7,7 @@ async function fetchSheetCSV(sheet_name = "")
     return csv_data;
 }
 
-const sheet_names = ["Conversation 0","Conversation A","Conversation B","Conversation C", "Example"]; 
+const sheet_names = ["Conversation 0","Minoan Mind Palace","Conversation A","Conversation B","Conversation C", "Example"]; 
 let sheets = {};
 let big_sheet = [];
 let all_scenes = [];

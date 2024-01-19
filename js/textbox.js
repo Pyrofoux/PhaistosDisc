@@ -11,7 +11,7 @@ class Textbox extends HTMLSprite
         this.elt.addEventListener("click", () => this.pressSkip());
 
         // create and position speaker arrow
-        this.arrow = new HTMLSprite("div", 0, 100 - height_ratio-3, 0, 0);
+        this.arrow = new HTMLSprite("div", 0, 100 - height_ratio-2, 0, 0);
         this.arrow.box.addClass("textbox_arrow");
         this.arrow.box.addClass("hidden");
         // settings
@@ -199,7 +199,8 @@ class Textbox extends HTMLSprite
         {
             case "left":
             this.arrow.box.show();
-            this.arrow.reposition(15);
+            //this.arrow.reposition(15);
+            this.arrow.reposition(12);
             break;
 
             case "right":
