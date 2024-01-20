@@ -13,7 +13,7 @@ class Screen
         // slideshow background picture
         this.slide_picture = null;
 
-        this.init();
+        this.init(screen_width, screen_height);
     }
 
     init(){}
@@ -63,6 +63,15 @@ class Screen
 
         this.slide_promise_resolve = resolve;
         });
+    }
+
+    copyVariables(next_screen) // for seemingless transitions
+    {
+        // slideshow variable
+        next_screen.sliding_time = this.sliding_time;
+        next_screen.sliding_y = this.sliding_y;
+        next_screen.slide_promise_resolve= this.slide_promise_resolve;
+        next_screen.slide_picture = this.slide_picture; 
     }
 
     preDraw(sw,sh)
@@ -133,8 +142,6 @@ class DemoScreen extends Screen
             w:A_width/disc_scaling,
             h:A_height/disc_scaling,
         };
-
-        console.log(screen_width, screen_height)
 
        this.disc.x = this.disc.cx - this.disc.w/2;
        this.disc.y = this.disc.cy - this.disc.h/2;

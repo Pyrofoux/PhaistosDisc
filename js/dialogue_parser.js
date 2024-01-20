@@ -4,7 +4,6 @@ let current_slide_picture = null;
 
 async function playScene(scene_name)
 {
-  //var sheet = sheets["Conversation 0"];
   var sheet = big_sheet;
   console.log(sheet)
   var current_index = 0;
@@ -82,6 +81,34 @@ async function playScene(scene_name)
             }
             processLine(index+1);
         break;
+
+      case "CHANGE_SCREEN":
+        var screen_name = line["Dialogue"].trim().toLowerCase();
+        if(screens[screen_name])
+        {
+          console.log("CHANGE_SCREEN", screen_name)
+          changeScreen(screens[screen_name]);
+        }
+        else
+        {
+          console.log("CHANGE_SCREEN", screen_name, "not found");
+        }
+        processLine(index+1);
+      break;
+
+      case "SCREEN_ACTION":
+        var action_name = line["Dialogue"].trim();
+        if(screen[action_name])
+        {
+          console.log("SCREEN_ACTION", action_name)
+          screen[action_name]();
+        }
+        else
+        {
+          console.log("CHANGE_SCREEN", action_name, "not found");
+        }
+        processLine(index+1);
+      break;
 
       case "CHOICE_A":
       case "CHOICE_B":

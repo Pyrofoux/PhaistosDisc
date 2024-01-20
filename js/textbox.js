@@ -10,6 +10,18 @@ class Textbox extends HTMLSprite
         this.box.style("cursor","pointer");
         this.elt.addEventListener("click", () => this.pressSkip());
 
+        // create and position speaker portraits
+        this.heads = {};
+        //this.heads.plumed = new HTMLSpriteImg("img/PLUMED_HEAD.svg", 3, 58, 15, AUTO, 24 ,30); // last two numbers are from the file data on wikipedia: width, height
+        this.heads.plumed = new HTMLSpriteImg("img/PLUMED_HEAD.svg", 3, 63, 12, AUTO, 24 ,30); // last two numbers are from the file data on wikipedia: width, height
+        let plumed = this.heads.plumed;
+        plumed.box.class("archeo_portrait");
+
+        //this.heads.tattoo = new HTMLSpriteImg("img/TATTOOED_HEAD.svg", 83, 60, 12, AUTO, 23 ,32);
+        this.heads.tattoo = new HTMLSpriteImg("img/TATTOOED_HEAD.svg", 83, 64, 10, AUTO, 23 ,32);
+        let tattoo = this.heads.tattoo;
+        tattoo.box.class("designer_portrait");
+
         // create and position speaker arrow
         this.arrow = new HTMLSprite("div", 0, 100 - height_ratio-2, 0, 0);
         this.arrow.box.addClass("textbox_arrow");
@@ -171,21 +183,21 @@ class Textbox extends HTMLSprite
                 this.box.style("color",COLORS.ARCHEO_TEXT_COLOR);
                 this.speak_sound = sounds.blip_f;
                 this.moveArrow("left");
-                screens.convo.heads.plumed.box.removeClass("inactive_portrait");
-                screens.convo.heads.tattoo.box.addClass("inactive_portrait");
+                this.heads.plumed.box.removeClass("inactive_portrait");
+                this.heads.tattoo.box.addClass("inactive_portrait");
 
             break;
             case "DESIGNER":
                 this.box.style("color",COLORS.DESIGNER_TEXT_COLOR);
                 this.speak_sound = sounds.blip_m;
                 this.moveArrow("right");
-                screens.convo.heads.tattoo.box.removeClass("inactive_portrait");
-                screens.convo.heads.plumed.box.addClass("inactive_portrait");
+                this.heads.tattoo.box.removeClass("inactive_portrait");
+                this.heads.plumed.box.addClass("inactive_portrait");
             break;
 
             default:
-                screens.convo.heads.plumed.box.addClass("inactive_portrait");
-                screens.convo.heads.tattoo.box.addClass("inactive_portrait");
+                this.heads.plumed.box.addClass("inactive_portrait");
+                this.heads.tattoo.box.addClass("inactive_portrait");
                 this.box.style("color",COLORS.DEFAULT_TEXT_COLOR);
                 this.speak_sound = sounds.letter;
                 this.moveArrow("none");

@@ -1,0 +1,91 @@
+@font-face {
+  font-family: "Humming";
+  src:
+    url("humming.otf") format("opentype"),
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color:black;
+  color:white;
+  overflow: hidden;
+  
+}
+
+canvas
+{
+  z-index:0;
+}
+
+#screen_container
+{
+  width:50%;
+  display:block;
+  margin:auto;
+  /* text-align:center; */
+  position: relative;
+  transform: translateY(0%);
+}
+
+.hidden
+{
+  display:none;
+}
+
+.fade_in
+{
+  animation: fading_in 1s forwards;
+}
+
+@keyframes fading_in {
+  from {
+    display:block;
+    opacity: 0;
+  }
+
+  to{
+    opacity:1;
+  }
+}
+
+.fade_out
+{
+  animation: fading_out 1s forwards;
+}
+
+@keyframes fading_out {
+  from {
+    opacity: 1;
+  }
+
+  to{
+    display:none;
+    opacity:0;
+  }
+}
+
+.orange_svg
+{
+  filter: invert(75%) sepia(31%) saturate(924%) hue-rotate(338deg) brightness(98%) contrast(102%) !important;
+}
+
+.grey_svg
+{
+  filter: invert(54%) sepia(0%) saturate(36%) hue-rotate(136deg) brightness(93%) contrast(85%);
+}
+
+.purple_svg
+{
+  filter: invert(77%) sepia(13%) saturate(1084%) hue-rotate(222deg) brightness(96%) contrast(102%) !important;
+}
+
+/*****/
+
+.map_title
+{
+  font-family:"Humming";
+  transform: translateX(-50%);
+  font-size: calc(1.5vw); /*Text size that depends on container size. Tweak numbers by keeping the 2/2/1 ratio*/
+}

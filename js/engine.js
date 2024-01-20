@@ -28,12 +28,17 @@ async function preload()
   spr.symbols["PLUMED_HEAD"]   = loadImage("img/PLUMED_HEAD.svg");
   spr.symbols["TATTOOED_HEAD"] = loadImage("img/TATTOOED_HEAD.svg");
 
+
   spr.slides = {}; // slide pictures
   spr.slides.blank_bg = loadImage("img/blank_slide_bg.png");
   spr.slides.blank_front = loadImage("img/blank_slide_front.png");
   spr.slides.blank = loadImage("img/blank_slide.png");
   spr.slides.disc = loadImage("img/slide_disc.png");
-  spr.slides.palace_map = loadImage("img/palace_plan.jpg");
+
+
+  spr.palace_map = loadImage("img/palace_map.png");
+
+  spr.font = loadFont("./humming.otf");
 
   // sounds
   sounds.letter = loadSound("audio/letter.mp3");
@@ -92,15 +97,24 @@ async function setup()
   screens = 
   {
     "demo":new DemoScreen("demo"),
-    "convo":new ConvoScreen("convo"),
+    "start":new StartScreen("start"),
+    "conversation":new ConvoScreen("conversation"),
+    "load":new LoadScreen("load"),
+    "map":new MapScreen("map"),
+    "workshop":new WorkshopScreen("workshop"),
   }
 
-  changeScreen(screens.convo);
-  
+  // text font when writing on canvas
+  textFont(spr.font);
+  textAlign(CENTER, CENTER);
+
+  changeScreen(screens.load);
   await loadAllSheets();
-  playScene("OPENING_DISCUSSION")
+  changeScreen(screens.start);
+  
+  //playScene("OPENING_DISCUSSION")
   //playScene("DEBUG_SCENE")
-  //playScene("DISCUSSION_EXAMPLE");
+  //playScene("MINDPALACE_OPENING");
 
   
   // debug scenes
@@ -132,21 +146,26 @@ function mouseClicked()
 {
   var x = Math.floor(mouseX),
   y = Math.floor(mouseY);
-  screen.onClick(x,y);
+  if(screen) screen.onClick(x,y);
 }
 
 function mouseMoved() // have to be detected another way
 {
   var x = Math.floor(mouseX),
   y = Math.floor(mouseY);
-  screen.onMouseMove(x,y);
+  if(screen) screen.onMouseMove(x,y);
 }
 
 function changeScreen(destination_screen)
 {
-  if(screen) screen.onLeave();
+  if(screen)
+  {
+    screen.onLeave(screen_width, screen_height);
+    screen.copyVariables(destination_screen);
+  }
+  // import current slide pictures
   screen = destination_screen;
-  screen.onEnter();
+  screen.onEnter(screen_width, screen_height);
 }
 
 function windowResized() {
