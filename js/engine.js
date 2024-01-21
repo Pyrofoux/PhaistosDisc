@@ -8,10 +8,12 @@ let main_cvs, disc_cvs, textbox;
 let info, hidden;
 
 
-//const img_names = ["A_disc", "A_cells", "A_symbols"];
-const img_names = [];
+//const img_disc = ["A_disc", "A_cells", "A_symbols"];
+const img_disc = [];
 const A_width = 1883;
 const A_height = 1929
+
+const img_symbols = ["PEDESTRIAN","BEE","SHIP","SHIELD","ROSETTE","ARROW","BULLS_LEG"];
 
 let pixel_density;
 let screen;
@@ -23,20 +25,22 @@ let sounds = {}, spr = {};
 async function preload()
 {
   // disc labeled layers
-  img_names.forEach(name => disc_imgs[name] = loadImage(`img/${name}.png`));
+  img_disc.forEach(name => disc_imgs[name] = loadImage(`img/disc/${name}.png`));
+
   spr.symbols = {}; // svg symbols
-  spr.symbols["PLUMED_HEAD"]   = loadImage("img/PLUMED_HEAD.svg");
-  spr.symbols["TATTOOED_HEAD"] = loadImage("img/TATTOOED_HEAD.svg");
+  img_symbols.forEach(name =>{
+    spr.symbols[name] = loadImage(`img/symbols/png/${name}.png`);
+    spr.symbols[name].filter(INVERT);
+  });
 
 
   spr.slides = {}; // slide pictures
-  spr.slides.blank_bg = loadImage("img/blank_slide_bg.png");
-  spr.slides.blank_front = loadImage("img/blank_slide_front.png");
-  spr.slides.blank = loadImage("img/blank_slide.png");
-  spr.slides.disc = loadImage("img/slide_disc.png");
+  spr.slides.blank_bg     = loadImage("img/slides/blank_slide_bg.png");
+  spr.slides.blank_front  = loadImage("img/slides/blank_slide_front.png");
+  spr.slides.blank        = loadImage("img/slides/blank_slide.png");
+  spr.slides.disc         = loadImage("img/slides/slide_disc.png");
 
-
-  spr.palace_map = loadImage("img/palace_map.png");
+  spr.palace_map = loadImage("img/palace/palace_map.png");
 
   spr.font = loadFont("./humming.otf");
 
@@ -47,6 +51,9 @@ async function preload()
   sounds.choice_made = loadSound("audio/choice_made.wav");
   sounds.select = loadSound("audio/select.wav");
   sounds.slide = loadSound("audio/slideshow_button.wav");
+  sounds.stamp = loadSound("audio/stamp.wav");
+  sounds.clear = loadSound("audio/clear.wav");
+
   Object.values(sounds).forEach(sound => sound.setVolume(0.5));
   sounds.choice_made.setVolume(1);
 }
@@ -67,7 +74,7 @@ async function setup()
   console.log("canvas dims",screen_width, screen_height);
 
   /* // loading disc images pixels
-  img_names.forEach( name =>{
+  img_disc.forEach( name =>{
     pixels[name] = getPixels(disc_imgs[name]);
     palettes[name] = countColors(pixels[name]);
   });
@@ -107,6 +114,8 @@ async function setup()
   // text font when writing on canvas
   textFont(spr.font);
   textAlign(CENTER, CENTER);
+
+  //changeScreen(screens.workshop);
 
   changeScreen(screens.load);
   await loadAllSheets();

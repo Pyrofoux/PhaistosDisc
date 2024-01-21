@@ -8,7 +8,7 @@ class ConvoScreen extends Screen
         for(var i = 0; i < 3; i++)
         {
             var size = 5, spacing = 8;
-            let rosette = new HTMLSpriteImg("img/ROSETTE.svg", 50-size/2 + (i-1)*spacing, 78-size, size, AUTO, 25, 26);
+            let rosette = new HTMLSpriteImg("img/symbols/svg/ROSETTE.svg", 50-size/2 + (i-1)*spacing, 78-size, size, AUTO, 25, 26);
             rosette.box.addClass("discussion_token");
             rosette.box.addClass("hidden");
             this.rosettes.push(rosette);

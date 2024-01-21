@@ -4,7 +4,12 @@ const COLORS = {
     DEFAULT_TEXT_COLOR:"#827158",
     DEFAULT_TEXT_BGCOLOR:"#FEFBE5",
     DESIGNER_TEXT_COLOR: "#7444A7",
-    ARCHEO_TEXT_COLOR: "#AA7534"
+    ARCHEO_TEXT_COLOR: "#AA7534",
+    STAMP_BG:"#F6DB44",
+    STAMP_CONTOUR:"#FFDB3D",
+    STAMP_SYMBOL:"#341802",
+    COLOR_CLAY:"#C7866A",
+    STAMP_ON_DISC:"#212121",
 }
 
 // built manually using coordToSymbols() and clicking on the canvas
