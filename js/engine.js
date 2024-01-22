@@ -115,11 +115,11 @@ async function setup()
   textFont(spr.font);
   textAlign(CENTER, CENTER);
 
-  changeScreen(screens.workshop);
+  //changeScreen(screens.workshop);
 
-  //changeScreen(screens.load);
-  //await loadAllSheets();
-  //changeScreen(screens.start);
+  changeScreen(screens.load);
+  await loadAllSheets();
+  changeScreen(screens.start);
   
   //playScene("OPENING_DISCUSSION")
   //playScene("DEBUG_SCENE")
