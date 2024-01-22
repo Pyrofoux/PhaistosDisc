@@ -30,35 +30,7 @@ class WorkshopScreen extends Screen
     {
 
         this.slide_picture = null; // erase previous slide picture
-        
-
-        // create stamps
-        this.stamps_data.forEach((data,index)=>{
-            var stamp = new this.stamps.Sprite();
-            stamp.symbol = data.symbol;
-            stamp.x = (50 + (index-this.stamps_data.length/2+1/2)*10  )      /100*sw;
-            stamp.later = 2;
-            stamp.y = 8/100*sw;
-            stamp.draw = () => this.drawStamp(stamp, sw, sh);
-        });
-
-        // create clay disc
-        this.disc = new Sprite();
-        this.disc.diameter = this.disc_size;
-        this.disc.x = sw*50/100;
-        this.disc.y = sh*50/100;
-        this.disc.color = COLORS.COLOR_CLAY;
-        this.disc.collider = "kinematic";
-        this.disc.strokeWeight = 3;
-        this.disc.layer = 0;
-        this.disc.draw = () =>{
-            fill(COLORS.COLOR_CLAY);
-            noStroke();
-            circle(0,0, this.disc.diameter);
-            image(this.stamp_buffer, 0,0);
-        }
-
-        this.clearDisc();
+        this.createSprites(sw,sh);
         await this.slideIn(); // slide in effect
 
     }
@@ -66,13 +38,20 @@ class WorkshopScreen extends Screen
     drawStamp(stamp, sw, sy)
     {
         push();
-        fill(COLORS.STAMP_BG);
+        //fill(COLORS.STAMP_BG);
         stroke(COLORS.STAMP_CONTOUR);
         noStroke()
+
+        if(stamp.symbol != "DELETE") // bottom of the stamps
+        {
+            fill(COLORS.STAMP_FOOT);
+            circle(0, sw*1/100, stamp.diameter);
+        }
         circle(0,0,stamp.diameter);
+        
 
         drawingContext.save();
-        let gradient = drawingContext.createLinearGradient(-stamp.diameter/2, -stamp.diameter/2, stamp.diameter/2, stamp.diameter/2);
+        let gradient = drawingContext.createLinearGradient(-stamp.diameter, -stamp.diameter, stamp.diameter, stamp.diameter);
         
         if(stamp.symbol == "DELETE")
         {
@@ -90,6 +69,7 @@ class WorkshopScreen extends Screen
         drawingContext.fillStyle = gradient;
         drawingContext.fill();
         drawingContext.restore();
+
         tint(COLORS.STAMP_SYMBOL);
         if(stamp.symbol != "DELETE")
         {
@@ -112,7 +92,7 @@ class WorkshopScreen extends Screen
             w = h*img.width/img.height;
         }
         if(!cvs) image(img,x,y,w,h);
-        else cvs.image(img,x+(fit-w)/4,y+(fit-h)/4,w,h) // tried to fix a weird shift, good enough for now
+        else cvs.image(img,x+w/4,y+h/4,w,h) // tried to fix a weird shift, good enough for now
     }
 
     draw(sw,sh)
@@ -134,7 +114,8 @@ class WorkshopScreen extends Screen
                if(stamp.symbol == "DELETE")
                {
                 sounds.clear.play();
-                this.clearDisc();
+                this.deleteSprites();
+                this.createSprites(sw,sh);
                } else if(this.areColliding(stamp, this.disc))
                {
                  sounds.stamp.play();
@@ -174,10 +155,12 @@ class WorkshopScreen extends Screen
     stampTrace(stamp)
     {
             //stamp.x = this.disc.x - this.disc.radius + dx + stamp.radius
-
-
+        
         var dx =  -this.disc.x + this.disc.radius + stamp.x - stamp.radius;
         var dy =  -this.disc.y + this.disc.radius + stamp.y - stamp.radius;
+
+        dy += 1/100*screen_width;
+
         this.stamp_buffer.tint(COLORS.STAMP_ON_DISC)
         this.drawSymbol(stamp.symbol, dx, dy, stamp.diameter*this.square_in_circle, this.stamp_buffer)
     }
@@ -194,6 +177,43 @@ class WorkshopScreen extends Screen
 
     }
 
+    createSprites(sw,sh)
+    {
+        // create stamps
+        this.stamps_data.forEach((data,index)=>{
+            var stamp = new this.stamps.Sprite();
+            stamp.symbol = data.symbol;
+            stamp.x = (50 + (index-this.stamps_data.length/2+1/2)*10  )      /100*sw;
+            stamp.later = 2;
+            stamp.y = 8/100*sw;
+            stamp.draw = () => this.drawStamp(stamp, sw, sh);
+        });
+
+        // create clay disc
+        this.disc = new Sprite();
+        this.disc.diameter = this.disc_size;
+        this.disc.x = sw*50/100;
+        this.disc.y = sh*50/100;
+        this.disc.color = COLORS.COLOR_CLAY;
+        this.disc.collider = "kinematic";
+        this.disc.strokeWeight = 3;
+        this.disc.layer = 0;
+        this.disc.draw = () =>{
+            fill(COLORS.COLOR_CLAY);
+            noStroke();
+            circle(0,0, this.disc.diameter);
+            image(this.stamp_buffer, 0,0);
+        };
+
+        this.clearDisc();
+    }
+
+    deleteSprites()
+    {
+        this.stamps.removeAll();
+        this.disc.remove();
+    }
+
     areColliding(c1,c2)
     {
         return dist(c1.x, c1.y, c2.x, c2.y) <= c1.radius + c2.radius;
@@ -201,8 +221,7 @@ class WorkshopScreen extends Screen
 
     onLeave()
     {
-        this.stamps.removeAll();
-        this.disc.remove();
+        this.deleteSprites();
     }
 
     onChoice(choice)
