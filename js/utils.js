@@ -63,3 +63,20 @@ function searchIn(obj, value)
   }
   return -1;
 }
+
+// handy funciton with same parameters as image()
+function rotate_and_draw_image(img, img_x, img_y, img_width, img_height, angle){
+  push()
+  translate(img_x+img_width/2, img_y+img_height/2);
+  rotate(degrees(angle));
+  image(img, 0, 0, img_width, img_height);
+  pop();
+}
+
+async function waitFrames(frames)
+{
+  return new Promise(async (resolve) =>{
+    for(var i = 0; i < frames; i++) await new Promise(resolve => {requestAnimationFrame(resolve);});
+    resolve();
+  })
+}

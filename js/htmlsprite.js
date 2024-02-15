@@ -37,6 +37,16 @@ class HTMLSprite
         this._h = (h == AUTO ? AUTO : h/100) || this._h;
         this.adjust();
     }
+
+    remove()
+    {
+        this.box.remove();
+    }
+
+    event(...args)
+    {
+        this.box.elt.addEventListener(...args);
+    }
 }
 
 class HTMLSpriteImg extends HTMLSprite

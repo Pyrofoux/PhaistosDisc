@@ -8,8 +8,11 @@ const COLORS = {
     STAMP_FOOT:"#BC7D0F",
     STAMP_CONTOUR:"#FFDB3D",
     STAMP_SYMBOL:"#341802",
+    EMPTY_SLOT_FILL:"#141414",
     COLOR_CLAY:"#C7866A",
-    STAMP_ON_DISC:"#212121",
+    STAMP_ON_DISC:"#3F2B23",
+    KILN_READER_BG:"#60473D",
+    //STAMP_ON_DISC:"white",
 }
 
 // built manually using coordToSymbols() and clicking on the canvas

@@ -16,15 +16,19 @@ class MapScreen extends Screen
 
        this.default_title = "MINOAN MIND PALACE";
         this.doors_data = [
-            {x:60,y:40,destination:"WORKSHOP",char:"W"}
+            {x:60,y:40,destination:"WORKSHOP",char:"WORKSHOP"}
         ];
 
         this.doors = new Group();
-        this.doors.radius = 10;
+        this.doors.width = 15;
+        this.doors.height = 15;
+        this.doors.rotation = 45;
         this.doors.strokeColor = "gold";
-        this.doors.textColor   = "gold",
+        this.doors.textColor   = "gold";
+        this.doors.textStrokeWeight  = 0;
+        this.doors.textSize  = 1.5/100*sw;
         this.doors.strokeWeight = sw/250;
-        this.doors.color = "purple";
+        this.doors.color = COLORS.SCREEN_BG;
         //this.doors.text = "!";
         this.doors.textFont = "Humming"; // doesn't work, can be set with textFont()
 
@@ -32,7 +36,6 @@ class MapScreen extends Screen
         this.title.box.addClass("map_title");
         this.title.box.addClass("hidden");
         this.title.box.html(this.default_title);
-
     }
 
     async onEnter(sw,sh)
@@ -65,7 +68,7 @@ class MapScreen extends Screen
                 }
                 else
                 {
-                    door.color = "purple";
+                    door.color = COLORS.SCREEN_BG;
                 }
 
                 if(door.mouse.presses())
@@ -90,9 +93,19 @@ class MapScreen extends Screen
         var d = new this.doors.Sprite();
         d.x = x/100*sw;
         d.y = y/100*sh;
-        d.text = char;
+        d.label = char;
         d.destination = destination;
-        //d.textSize = sw/60;
+
+        var default_draw = d._draw;
+        d.draw = ()=>{
+            default_draw(); // draw default shape
+            noStroke();
+            rotate(-d.rotation) // make sure text is aligned horizontally
+            textSize(d.textSize)
+            fill(this.doors.textColor)
+            text(d.label, 0, d.height+1*sw/100)
+        };
+
     }
 
     clickedDoor(destination)

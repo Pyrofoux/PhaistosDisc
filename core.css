@@ -89,3 +89,16 @@ canvas
   transform: translateX(-50%);
   font-size: calc(1.5vw); /*Text size that depends on container size. Tweak numbers by keeping the 2/2/1 ratio*/
 }
+
+.workshop_button
+{
+  font-family:"Humming";
+  transform: translateX(-50%);
+  font-size: calc(1.5vw); /*Text size that depends on container size. Tweak numbers by keeping the 2/2/1 ratio*/
+}
+
+.workshop_button:hover
+{
+  cursor:pointer;
+  color:goldenrod;
+}

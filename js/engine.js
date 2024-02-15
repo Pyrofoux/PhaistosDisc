@@ -53,6 +53,9 @@ async function preload()
   sounds.slide = loadSound("audio/slideshow_button.wav");
   sounds.stamp = loadSound("audio/stamp.wav");
   sounds.clear = loadSound("audio/clear.wav");
+  sounds.disc_mount = loadSound("audio/disc_mount.mp3");
+  sounds.disc_open = loadSound("audio/disc_open.mp3");
+  sounds.disc_read = loadSound("audio/disc_read.mp3");
 
   Object.values(sounds).forEach(sound => sound.setVolume(0.5));
   sounds.choice_made.setVolume(1);
@@ -115,10 +118,13 @@ async function setup()
   textFont(spr.font);
   textAlign(CENTER, CENTER);
 
-  //changeScreen(screens.workshop);
+  
 
   changeScreen(screens.load);
   await loadAllSheets();
+  textbox.set("");
+  //current_variables["DONE_WORKSHOP_TUTO"] = "FALSE";
+  //changeScreen(screens.workshop);
   changeScreen(screens.start);
   
   //playScene("OPENING_DISCUSSION")
@@ -126,7 +132,7 @@ async function setup()
   //playScene("MINDPALACE_OPENING");
 
   
-  // debug scenes
+  // create links to debug scenes
   for(var scene_name in all_scenes)
   {
     info.child(createElement("br"));
@@ -139,7 +145,6 @@ async function setup()
       playScene(e.target.dataset.scene_name)
     };
     info.child(link);
-    console.log(link, scene_name)
   }
 
 }

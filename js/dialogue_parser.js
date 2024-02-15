@@ -194,6 +194,22 @@ async function playScene(scene_name)
       }
     break;
 
+    case "ANIMATION": // play an animation before reading next line
+      var animation_name = line["Dialogue"];
+      switch(animation_name)
+      {
+        case "BURNT_DISC":
+          await screen.playDiscAnimation("burnt");
+          processLine(index+1);
+        break;
+
+        case "FIRED_DISC":
+          await screen.playDiscAnimation("fired");
+          processLine(index+1);
+        break;
+      }
+    break;
+
     }
   }
 
