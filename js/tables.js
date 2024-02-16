@@ -12,6 +12,8 @@ const COLORS = {
     COLOR_CLAY:"#C7866A",
     STAMP_ON_DISC:"#3F2B23",
     KILN_READER_BG:"#60473D",
+    MAP_ICON_STROKE:"#FFDB3D",
+    MAP_ICON_SELECTED:"#d427dd",
     //STAMP_ON_DISC:"white",
 }
 

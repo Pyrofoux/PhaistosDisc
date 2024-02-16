@@ -5,7 +5,6 @@ let current_slide_picture = null;
 async function playScene(scene_name)
 {
   var sheet = big_sheet;
-  console.log(sheet)
   var current_index = 0;
   for(var i = 0; i < sheet.length; i++)
   {
@@ -51,7 +50,7 @@ async function playScene(scene_name)
           var variable_to_check = line["Variables"];
           var value_to_check = line["Values"];
           var test = current_variables[variable_to_check] == value_to_check;
-          console.log("check",variable_to_check,current_variables[variable_to_check],test)
+          console.log("CHECK",variable_to_check,current_variables[variable_to_check],test)
           if((!test && !is_opposite) || (test && is_opposite))
           {
             processLine(index+1);
@@ -74,7 +73,7 @@ async function playScene(scene_name)
             };
 
             var text = line["Dialogue"].trim();
-            console.log("text",text)
+            console.log("TEXT",text)
             if(text != "") // empty row => skip it
             {
             await textbox.dialogue(text, styles[character]);
@@ -98,10 +97,11 @@ async function playScene(scene_name)
 
       case "SCREEN_ACTION":
         var action_name = line["Dialogue"].trim();
+        var value_name = line["Values"].trim();
         if(screen[action_name])
         {
-          console.log("SCREEN_ACTION", action_name)
-          screen[action_name]();
+          console.log("SCREEN_ACTION", action_name, value_name ?? "")
+          screen[action_name](value_name);
         }
         else
         {
@@ -132,7 +132,7 @@ async function playScene(scene_name)
     
     case "TELEPORT":
         var scene_name = line["Dialogue"];
-        console.log('teleport',scene_name);
+        console.log('TELEPORT',scene_name);
         playScene(scene_name)
     break;
 
@@ -237,10 +237,12 @@ function processVariableAssignement(variables_cell, values_cell)
         var increment = parseInt(var_value.slice(1));
         if(!current_variables[var_name])current_variables[var_name] = 0;
         current_variables[var_name] = parseInt(current_variables[var_name]) + increment;
+        console.log("SET", var_name, current_variables[var_name]);
       }
-      else // set value
+      else if(var_name != "") // set value
       {
         current_variables[var_name] = var_value;
+        console.log("SET", var_name, current_variables[var_name]);
       }
     }
 }

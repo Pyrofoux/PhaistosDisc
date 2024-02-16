@@ -21,7 +21,7 @@ class WorkshopScreen extends Screen
             {"symbol":"BEE"},
         ];
 
-        this.unlocked_stamps = ["PEDESTRIAN", "DELETE"];
+        this.unlocked_stamps = [];
         this.stamped_symbols = [];
 
         this.stamps = new Group();
@@ -45,9 +45,26 @@ class WorkshopScreen extends Screen
     {
 
         this.slide_picture = null; // erase previous slide picture
+        this.checkUnlockedStamps();
         this.createSprites(sw,sh);
         await this.slideIn(); // slide in effect
 
+    }
+
+    checkUnlockedStamps() // check from current_variables which stamps are unlocked
+    {
+        var unlocked = new Set();
+        unlocked.add("PEDESTRIAN"); // the PEDESTRIAN stamp and DELETE are always unlocked
+        unlocked.add("DELETE");
+
+        this.stamps_data.forEach(stamp =>{
+            // check if variables like UNLOCKED_STAMP_ROSETTE are set to TRUE
+            if(current_variables[`UNLOCKED_STAMP_${stamp.symbol.toUpperCase()}`] == "TRUE")
+            {
+                unlocked.add(stamp.symbol);
+            }
+        });
+        this.unlocked_stamps = Array.from(unlocked);
     }
 
     drawStamp(stamp, sw, sy)
