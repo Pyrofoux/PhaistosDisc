@@ -123,13 +123,12 @@ async function setup()
   changeScreen(screens.load);
   await loadAllSheets();
   textbox.set("");
-  //current_variables["DONE_WORKSHOP_TUTO"] = "FALSE";
+
   //changeScreen(screens.workshop);
-  changeScreen(screens.start);
-  
-  //playScene("OPENING_DISCUSSION")
+  //changeScreen(screens.start); // the one to start with in prod
+  changeScreen(screens.conversation); // the one to start with in prod
   //playScene("DEBUG_SCENE")
-  //playScene("MINDPALACE_OPENING");
+  playScene("MINDPALACE_OPENING");
 
   
   // create links to debug scenes
