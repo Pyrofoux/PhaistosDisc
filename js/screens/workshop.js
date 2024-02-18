@@ -76,7 +76,7 @@ class WorkshopScreen extends Screen
         if(stamp.symbol != "DELETE") // bottom of the stamps
         {
             fill(COLORS.STAMP_FOOT);
-            circle(0, sw*1/100, stamp.diameter);
+            circle(0, sw*0.8/100*stamp.scale, stamp.diameter);
         }
         circle(0,0,stamp.diameter);
         
@@ -197,7 +197,7 @@ class WorkshopScreen extends Screen
         //stamp.x = this.disc.x - this.disc.radius + dx + stamp.radius
         var dx =  -this.disc.x + this.disc.radius + stamp.x;
         var dy =  -this.disc.y + this.disc.radius + stamp.y;
-        dy += 1/100*screen_width; // vertical offset to account for stamp height
+        dy += 0.8/100*screen_width; // vertical offset to account for stamp height
         var symbol = stamp.symbol, diameter = stamp.diameter;
         this.stamped_symbols.push({symbol,dx,dy,diameter});
         this.drawDiscSymbols();
@@ -313,7 +313,7 @@ class WorkshopScreen extends Screen
             { // do not do empty slot for an unlocked "DELETE" symbol
                 var empty_slot = new this.empty_slots.Sprite();
                 empty_slot.x = ox;
-                empty_slot.y = oy + sw*1/100; // vertical shift to map to bottom of stamp
+                empty_slot.y = oy + sw*0.8/100; // vertical shift to map to bottom of stamp
                 empty_slot.color = COLORS.EMPTY_SLOT_FILL;
                 empty_slot.strokeWeight = 0;
                 empty_slot.layer = 1;
@@ -538,7 +538,7 @@ class WorkshopScreen extends Screen
             sounds.disc_read.play();
             await rotationAnimation();
             resolve();
-        })
+        });
     }
 
     onStamp()

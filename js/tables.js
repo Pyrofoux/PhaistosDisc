@@ -14,6 +14,7 @@ const COLORS = {
     KILN_READER_BG:"#60473D",
     MAP_ICON_STROKE:"#FFDB3D",
     MAP_ICON_SELECTED:"#d427dd",
+    UNLOCK_STRIPE:"#f2c763",
     //STAMP_ON_DISC:"white",
 }
 

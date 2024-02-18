@@ -195,7 +195,8 @@ async function playScene(scene_name)
     break;
 
     case "ANIMATION": // play an animation before reading next line
-      var animation_name = line["Dialogue"];
+      var animation_name = line["Dialogue"].trim();
+      var value_name = line["Values"].trim();
       switch(animation_name)
       {
         case "BURNT_DISC":
@@ -206,6 +207,16 @@ async function playScene(scene_name)
         case "FIRED_DISC":
           await screen.playDiscAnimation("fired");
           processLine(index+1);
+        break;
+
+        case "UNLOCK_STAMP":
+          await screen.playUnlockStampAnimation(screens.workshop, value_name);
+          processLine(index+1)
+        break;
+
+        case "UNLOCK_STAMP_OUT":
+          await screen.playUnlockStampAnimationOut(screens.workshop, value_name);
+          processLine(index+1)
         break;
       }
     break;
