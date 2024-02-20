@@ -127,7 +127,7 @@ async function setup()
   //changeScreen(screens.workshop);
   //changeScreen(screens.start); // the one to start with in prod
   changeScreen(screens.conversation); // the one to start with in prod
-  playScene("DEBUG_SCENE")
+  playScene("OPENING_DISCUSSION_ENDING_1")
   //playScene("MINDPALACE_OPENING");
 
   
