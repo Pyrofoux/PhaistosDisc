@@ -59,7 +59,7 @@ class WorkshopScreen extends Screen
 
         this.stamps_data.forEach(stamp =>{
             // check if variables like UNLOCKED_STAMP_ROSETTE are set to TRUE
-            if(current_variables[`UNLOCKED_STAMP_${stamp.symbol.toUpperCase()}`] == "TRUE")
+            if(true || current_variables[`UNLOCKED_STAMP_${stamp.symbol.toUpperCase()}`] == "TRUE")
             {
                 unlocked.add(stamp.symbol);
             }
@@ -492,8 +492,9 @@ class WorkshopScreen extends Screen
             while (!done) // rotation loop
             {
                 // wait for next animation frame
-                await new Promise(resolve => {requestAnimationFrame(resolve);});
-
+                //await new Promise(resolve => {requestAnimationFrame(resolve);});
+                await waitFrames(1);
+                
                 var speed = this.disc.rotationSpeed;
                 speed = constrain(speed+acceleration, 0, max_speed) // accelerating
                 if(speed == max_speed) // attained peak speed

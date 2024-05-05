@@ -1,5 +1,5 @@
 
-let disc_imgs = [];
+let disc_imgs = {};
 let pixels = [];
 let palettes = {}
 let disc_scaling = 5;
@@ -8,8 +8,8 @@ let main_cvs, disc_cvs, textbox;
 let info, hidden;
 
 
-//const img_disc = ["A_disc", "A_cells", "A_symbols"];
-const img_disc = [];
+const img_disc = ["A_disc", "A_cells", "A_symbols"];
+//const img_disc = [];
 const A_width = 1883;
 const A_height = 1929
 
@@ -76,7 +76,7 @@ async function setup()
   main_cvs.parent("screen_container");
   console.log("canvas dims",screen_width, screen_height);
 
-  /* // loading disc images pixels
+  // loading disc images pixels
   img_disc.forEach( name =>{
     pixels[name] = getPixels(disc_imgs[name]);
     palettes[name] = countColors(pixels[name]);
@@ -91,7 +91,7 @@ async function setup()
   Object.keys(color2symbol).forEach(original_color_name => {
     var closest_match = getClosestColor(original_color_name.split("-"), palettes.A_symbols);
     color2symbol[closest_match] = color2symbol[original_color_name];
-  }); */
+  });
 
   // Other HTML elements
   info = createDiv('== DEBUG TOOLS ==');
@@ -106,12 +106,13 @@ async function setup()
   // create screens
   screens = 
   {
-    "demo":new DemoScreen("demo"),
+    "demo":new DemoScreen("demo"), // Demo of the disc drawing features
     "start":new StartScreen("start"),
     "conversation":new ConvoScreen("conversation"),
     "load":new LoadScreen("load"),
     "map":new MapScreen("map"),
     "workshop":new WorkshopScreen("workshop"),
+    "game1":new Game1Screen("game1"),
   }
 
   // text font when writing on canvas
@@ -126,9 +127,12 @@ async function setup()
 
   //changeScreen(screens.workshop);
   //changeScreen(screens.start); // the one to start with in prod
-  changeScreen(screens.conversation); // the one to start with in prod
-  playScene("OPENING_DISCUSSION_ENDING_1")
+  
+  //changeScreen(screens.conversation); // the one to start with in prod
+  //playScene("OPENING_DISCUSSION_ENDING_1")
   //playScene("MINDPALACE_OPENING");
+
+  changeScreen(screens.game1);
 
   
   // create links to debug scenes
