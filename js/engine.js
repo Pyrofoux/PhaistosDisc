@@ -2,13 +2,13 @@
 let disc_imgs = {};
 let pixels = [];
 let palettes = {}
-let disc_scaling = 5;
+let disc_scaling = 4.5;
 
 let main_cvs, disc_cvs, textbox;
 let info, hidden;
 
 
-const img_disc = ["A_disc", "A_cells", "A_symbols"];
+const img_disc = ["A_disc", "A_cells", "A_symbols", "A_surface"];
 //const img_disc = [];
 const A_width = 1883;
 const A_height = 1929

@@ -1,6 +1,6 @@
 class HTMLSpriteDice extends HTMLSprite
 {
-    constructor(src, x, y, w)
+    constructor(x, y, w)
     {
         super("div", x, y, w, AUTO, w ,w);
         this.box.addClass("dice-face");
@@ -11,7 +11,7 @@ class HTMLSpriteDice extends HTMLSprite
             this.addPip();
         }
 
-        this.event("click", () => this.shakeToFace(int(random(1,7))));
+        this.clickable = false;
     }
 
     addPip()
@@ -48,6 +48,9 @@ class HTMLSpriteDice extends HTMLSprite
 
             let angle = 0, scale = 1, zero, pips_to_show;
 
+            // Dice must not be clickable during animation
+            this.setClickable(false);
+
             const firstFrame = (timeStamp) => {
                 zero = performance.now();
                 pips_to_show = new Array(change_pips).fill(0).map(i => int(random(1,7)));
@@ -75,6 +78,61 @@ class HTMLSpriteDice extends HTMLSprite
             }
             requestAnimationFrame(firstFrame);
         });
+    }
+
+    setClickable(enabled)
+    {
+        this.clickable = enabled;
+        if(this.clickable)
+        {
+            this.box.addClass("clickable-dice");
+        }
+        else
+        {
+            this.box.removeClass("clickable-dice");
+        }
+    }
+
+}
+
+class HTMLSpriteDicePair
+{
+    constructor(x1, y1, x2, y2, w)
+    {
+        this.dice = [];
+        this.dice[0] = new HTMLSpriteDice(x1, y1, w);
+        this.dice[1] = new HTMLSpriteDice(x2, y2, w);
+        this.pip_values = [6, 6];
+    }
+
+    showFace(values)
+    {
+        this.dice[0].showFace(values[0]);
+        this.dice[1].showFace(values[1]);
+        this.pip_values = values;
+    }
+
+    async shakeToFace(values)
+    {
+        return Promise.all([
+        this.dice[0].shakeToFace(values[0]),
+        this.dice[1].shakeToFace(values[1]) ]);
+    }
+
+    event(...args)
+    {
+        this.dice[0].event(...args);
+        this.dice[1].event(...args);
+    }
+
+    get clickable() {
+        return this.dice[0].clickable && this.dice[1].clickable;
+    }
+
+    setClickable(enabled)
+    {
+        this.dice[0].setClickable(enabled);
+        this.dice[1].setClickable(enabled);
     }
 
 }

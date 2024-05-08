@@ -3,27 +3,34 @@ class Game1Screen extends Screen
 {
     init()
     {
+        // State contains information about the current state of the game
         this.state = this.initialState();
         
-
+        // Data for displaying the Phaistos disc
         this.disc = {
             cx:screen_width*0.5,
-            cy:screen_height*0.375,
+            cy:screen_height*0.4,
             w:A_width/disc_scaling,
             h:A_height/disc_scaling,
         };
 
-       this.disc.x = this.disc.cx - this.disc.w/2;
-       this.disc.y = this.disc.cy - this.disc.h/2;
+        this.disc.x = this.disc.cx - this.disc.w/2;
+        this.disc.y = this.disc.cy - this.disc.h/2;
 
-       // visual GUI state
+        // visual GUI state
         this.vstate = {
             highlighted_cell:-1,
             highlighted_symbol:-1,
+            blocked_cells:[],
+            clickable_cells: new Array(31).fill(0).map((v, i) => i),
         }
 
-       this.createInitialSprite();
-       this.redrawDiscImage(true);
+        // sprites for tokens and dice
+        this.tokens = {};
+        this.dice = {}
+
+        this.createInitialSprite();
+        this.redrawDiscImage(true);
     }
 
     disc2screen(coords)
@@ -39,7 +46,6 @@ class Game1Screen extends Screen
             hero:  0,
             taur: 30,
             dice_roll : [0, 0],
-            //blocked_cells: [ 11, 13, 19, 27, 30 ],
         }
     }
 
@@ -65,7 +71,6 @@ class Game1Screen extends Screen
 
     createInitialSprite()
     {
-        this.tokens = {};
 
         // hero token
         let hero = new Sprite();
@@ -77,7 +82,7 @@ class Game1Screen extends Screen
         hero.collider = "kinematic";
         this.tokens.hero = hero;
 
-        // taur
+        // taur token
         let taur = new Sprite();
         taur.radius = 10;
         taur.color = "#212121";
@@ -87,23 +92,38 @@ class Game1Screen extends Screen
         taur.collider = "kinematic";
         this.tokens.taur = taur;
 
-        // dice
-        var size = 5, spacing = 8;
-        let dice = new HTMLSpriteDice("div",1, 4, 6);
-        console.log(dice);
-        //dice.shakeToFace(5)
+        // dice for each player
+        let die_width = 6, dice_positions = {
+            "white":[{x:1, y:4} ,{x:1, y:15} ],
+            "black":[{x:80, y:4} ,{x:80, y:15} ],
+        };
 
+        for(let color in dice_positions)
+        {
+            let position = dice_positions[color];
+            let dice = new HTMLSpriteDicePair(position[0].x, position[0].y, position[1].x, position[1].y, die_width);
+            
+            // temporary
+            dice.event("click", () => 
+                {
+                    if(dice.clickable) dice.shakeToFace([int(random(1,7)), int(random(1,7))]);
+                    console.log(dice.clickable)
+                });
+            dice.setClickable(true);
+
+            this.dice[color] = dice;
+        }
     }
 
     draw()
     {
-        background("pink")
+        background("#212121")
         image(disc_cvs, this.disc.x, this.disc.y);
     }
 
     // Check if the visual info have actually changed
     // to avoid recalculating pixels at each frame
-    updateDiscImage(changed)
+    updateVisualState(changed)
     {
         let pixels_changed = false;
         for(let property in changed)
@@ -128,11 +148,11 @@ class Game1Screen extends Screen
 
         let cell = this.vstate.highlighted_cell;
 
-        disc_cvs.background(255);
-
+        disc_cvs.clear()
+        drawDisc("A_surface");
         drawDisc("A_disc");
 
-        var blocked_cells = this.getBlockedCells();
+        var blocked_cells = this.vstate.blocked_cells;
         var c = color("red");
         c.setAlpha(50);
         for(let blocked_cell of blocked_cells)
@@ -142,16 +162,9 @@ class Game1Screen extends Screen
 
         if(cell > -1)
         {
-            
             var c = color("blue")
             c.setAlpha(50);
             colorCell(cell, c);
-            info.html(`CELL ${cell}`);
-            cursor("pointer");
-        }
-        else
-        {
-            cursor("default")
         }
     }
 
@@ -176,7 +189,7 @@ class Game1Screen extends Screen
         var y = (my  - this.disc.y);
 
         if(x < 0 || y < 0) return false;
-        if(x >= A_width || y >= A_height) return false;
+        if(x >= this.disc.w || y >= this.disc.h) return false;
 
 
         var dx = x*disc_scaling;
@@ -192,6 +205,8 @@ class Game1Screen extends Screen
             await this.moveToken(this.tokens.taur, start_cell, end_cell)
         }
 
+        this.updateVisualState({blocked_cells: this.getBlockedCells()});
+
         // redraw image disc after click
         this.redrawDiscImage();
     }
@@ -201,16 +216,27 @@ class Game1Screen extends Screen
         var x = (mx  - this.disc.x);
         var y = (my  - this.disc.y);
         if(x < 0 || y < 0) return false;
-        if(x >= A_width || y >= A_height) return false;
+        if(x >= this.disc.w || y >= this.disc.h) return false;
 
 
         var dx = x*disc_scaling;
         var dy = y*disc_scaling;
 
-        var semantic = coordToSymbols(dx,dy)
-        this.updateDiscImage
-        ({
-            highlighted_cell:semantic.cell,
-        });
+        var semantic = coordToSymbols(dx,dy);
+        if(this.vstate.clickable_cells.includes(semantic.cell))
+        {
+            this.updateVisualState
+            ({
+                highlighted_cell:semantic.cell,
+            });
+
+            info.html(`CELL ${semantic.cell}`);
+            cursor("pointer");
+        }
+        else
+        {
+            cursor("default")
+        }
+        
     }
 }
