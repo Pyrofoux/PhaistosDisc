@@ -11,14 +11,16 @@ class WorkshopScreen extends Screen
 
         this.button_text = "▼ INSERT DISC ▼";
         this.stamps_data = [
-            {"symbol":"PEDESTRIAN"},
+            {"symbol":"PEDESTRIAN", "label":"MOVEMENT"},
             {"symbol":"DELETE"},
-            {"symbol":"BEE"},
-            {"symbol":"SHIP"},
-            {"symbol":"ARROW"},
-            {"symbol":"SHIELD"},
-            {"symbol":"ROSETTE"},
-            {"symbol":"BEE"},
+            {"symbol":"BULL", "label":"OPPONENT"},
+            {"symbol":"SHIELD", "label": "CHANCE"},
+            {"symbol":"EAGLE", "label": "DIVINATION"},
+            {"symbol":"ARROW", "label": "DEFEAT"},
+            // {"symbol":"ARROW", "label": "STRATEGY"},
+            // {"symbol":"SHIELD"},
+            // {"symbol":"ROSETTE"},
+            // {"symbol":"BEE"},
         ];
 
         this.unlocked_stamps = [];
@@ -55,19 +57,22 @@ class WorkshopScreen extends Screen
     {
         var unlocked = new Set();
         unlocked.add("PEDESTRIAN"); // the PEDESTRIAN stamp and DELETE are always unlocked
+        unlocked.add("BULL");
+        unlocked.add("SHIELD");
         unlocked.add("DELETE");
 
         this.stamps_data.forEach(stamp =>{
             // check if variables like UNLOCKED_STAMP_ROSETTE are set to TRUE
-            if(true || current_variables[`UNLOCKED_STAMP_${stamp.symbol.toUpperCase()}`] == "TRUE")
+            if(/* true || */ current_variables[`UNLOCKED_STAMP_${stamp.symbol.toUpperCase()}`] == "TRUE")
             {
                 unlocked.add(stamp.symbol);
             }
         });
+        console.log(this.unlocked_stamps, current_variables)
         this.unlocked_stamps = Array.from(unlocked);
     }
 
-    drawStamp(stamp, sw, sy)
+    drawStamp(stamp, sw, sh, labelized)
     {
         push();
         stroke(COLORS.STAMP_CONTOUR);
@@ -77,6 +82,13 @@ class WorkshopScreen extends Screen
         {
             fill(COLORS.STAMP_FOOT);
             circle(0, sw*0.8/100*stamp.scale, stamp.diameter);
+
+            // label
+            fill(COLORS.STAMP_LABEL);
+            if(labelized)
+            {
+                text(stamp.label, 0, -stamp.diameter*0.65)
+            }
         }
         circle(0,0,stamp.diameter);
         
@@ -292,19 +304,28 @@ class WorkshopScreen extends Screen
         this.button.box.addClass("workshop_button");
         this.button.box.addClass("hidden");
         this.button.box.html(this.button_text);
-        this.button.event("click", () => this.onClickInsertDisc(sw,sh))
+        
+        // DEBUG: removed it during the IndieMash demo
+        // TODO: remove it
+        //this.button.event("click", () => this.onClickInsertDisc(sw,sh))
+
+        this.button.event("click", () => this.showButton(false))
 
         // create stamps
         var start_x = 20;
-        var start_y = 30;
+        var start_y = 35; // 30
+
+        var spacing_x = 60; // 60
+        var spacing_y = 7;  // 6
+
         var num = this.stamps_data.length;
 
         this.stamps_data.forEach((data,index)=>{
 
             // coordinates of the stamps
             var ox, oy;
-            oy = start_y + (-num/2+1/2+ index-index%2)*6;
-            ox = start_x + (index%2)*60;
+            oy = start_y + (-num/2+1/2+ index-index%2)*spacing_y;
+            ox = start_x + (index%2)*spacing_x;
             ox *= sw/100; 
             oy *= sw/100;
 
@@ -328,6 +349,7 @@ class WorkshopScreen extends Screen
 
             var stamp = new this.stamps.Sprite();
             stamp.symbol = data.symbol;
+            stamp.label  = data.label || "";
 
             stamp.x = ox; 
             stamp.y = oy;
@@ -337,7 +359,7 @@ class WorkshopScreen extends Screen
 
             stamp.layer = 2;
             
-            stamp.draw = () => this.drawStamp(stamp, sw, sh);
+            stamp.draw = () => this.drawStamp(stamp, sw, sh, true);
         });
 
         // create clay disc

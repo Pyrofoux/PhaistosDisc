@@ -211,6 +211,7 @@ async function playScene(scene_name)
 
         case "UNLOCK_STAMP":
           await screen.playUnlockStampAnimation(screens.workshop, value_name);
+          current_variables[`UNLOCKED_STAMP_${value_name.toUpperCase()}`] = "TRUE";
           processLine(index+1)
         break;
 

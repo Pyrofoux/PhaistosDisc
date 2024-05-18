@@ -1,4 +1,4 @@
-async function fetchSheetCSV(sheet_name = "")
+async function fetchOnlineCSVSheet(sheet_name = "")
 {
     var google_sheet_id = "1y1cXqdAg-k8oPtNJ-OyCZql3d34yrv5ROTxWBWLO77M"; // id of the google sheet. needs to be public reading
     var sheet_url = `https://docs.google.com/spreadsheets/d/${google_sheet_id}/gviz/tq?tqx=out:csv&sheet=${sheet_name}`;
@@ -7,17 +7,28 @@ async function fetchSheetCSV(sheet_name = "")
     return csv_data;
 }
 
-const sheet_names = ["Conversation 0","Minoan Mind Palace","Workshop","Conversation 1","Conversation 2","Conversation 3", "Example"]; 
+const useOnlineSheet = true; // load online (Google Drive) or local sheet
+const local_xlxs_filename = "Phaistos Discussion (live).xlsx";
+const sheet_names = ["Conversation 0","Minoan Mind Palace","Workshop","Conversation 1","Conversation 2","Conversation 3", "Example","IndieMash"]; 
 let sheets = {};
 let big_sheet = [];
 let all_scenes = [];
+
 async function loadAllSheets()
 {
-    // collact all sheets
+
+    let local_sheets = {};
+    if(!useOnlineSheet)
+    {
+        var parsed_file = XLSX.read(await (await fetch(`./${local_xlxs_filename}`)).arrayBuffer());
+        local_sheets = parsed_file.Sheets;
+    }
+    console.log(local_sheets);
+    // collect all sheets
     for(var i in sheet_names)
     {
         var sheet_name = sheet_names[i];
-        var csv_string  = await fetchSheetCSV(sheet_name);
+        var csv_string  = useOnlineSheet ? await fetchOnlineCSVSheet(sheet_name) : XLSX.utils.sheet_to_csv(local_sheets[sheet_name]);
         var pure_sheet = Papa.parse(csv_string).data; //uses papaparse.min.js from github.com/mholt/PapaParse
         
         var sheet = [];
@@ -36,8 +47,7 @@ async function loadAllSheets()
             sheet.push(line);
         }
         }
-        
-        
+
         sheets[sheet_name] = sheet;
         // merge all sheets into a single one
         big_sheet = big_sheet.concat(sheet);

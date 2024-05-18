@@ -63,6 +63,8 @@ class ConvoScreen extends Screen
         this.rosette_count++;
     }
 
+
+    // animations
     playUnlockStampAnimation(workshop_screen, stamp_name)
     {
         let sw = this.sw, sh = this.sh;
@@ -119,4 +121,5 @@ class ConvoScreen extends Screen
             };        
         });
     }
+
 }

@@ -12,18 +12,27 @@ class Textbox extends HTMLSprite
 
         // create and position speaker portraits
         this.heads = {};
-        this.heads.plumed = new HTMLSpriteImg("img/symbols/svg/PLUMED_HEAD.svg", 3, 63, 12, AUTO, 24 ,30); // last two numbers are from the file data on wikipedia: width, height
+        // this.heads.plumed = new HTMLSpriteImg("img/symbols/svg/PLUMED_HEAD.svg", 3, 63, 12, AUTO, 24 ,30); // last two numbers are from the file data on wikipedia: width, height
+        this.heads.plumed = new HTMLSpriteImg("img/symbols/svg/PLUMED_HEAD.svg", 3, 61, 12, AUTO, 24 ,30); // last two numbers are from the file data on wikipedia: width, height
         let plumed = this.heads.plumed;
         plumed.box.class("archeo_portrait");
 
-        this.heads.tattoo = new HTMLSpriteImg("img/symbols/svg/TATTOOED_HEAD.svg", 83, 64, 10, AUTO, 23 ,32);
+        // this.heads.tattoo = new HTMLSpriteImg("img/symbols/svg/TATTOOED_HEAD.svg", 83, 64, 10, AUTO, 23 ,32);
+        this.heads.tattoo = new HTMLSpriteImg("img/symbols/svg/TATTOOED_HEAD.svg", 83, 62, 10, AUTO, 23 ,32);
         let tattoo = this.heads.tattoo;
         tattoo.box.class("designer_portrait");
 
         // create and position speaker arrow
-        this.arrow = new HTMLSprite("div", 0, 100 - height_ratio-2, 0, 0);
+        this.arrow = new HTMLSprite("div", 0, 100 - height_ratio-2 -2, 0, 0);
         this.arrow.box.addClass("textbox_arrow");
         this.arrow.box.addClass("hidden");
+        
+        // create and position name text
+        this.name = new HTMLSprite("div", 11, 97.5 - height_ratio, 0, 0);
+        this.name.box.addClass("textbox_name");
+        this.name.box.html("The Archeologist");
+        this.name.box.hide();
+        
         // settings
         this.speak_interval = 50; // millis
         this.choice_delay = 300;
@@ -40,6 +49,8 @@ class Textbox extends HTMLSprite
         this.skip_promise_resolve;
         this.choice_promise_resolve;
         
+        // Debug
+        // this.dialogue("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis","ARCHEO")
     }
 
     set(html)
@@ -178,38 +189,55 @@ class Textbox extends HTMLSprite
         switch(style)
         {
             case "ARCHEO":
-                this.box.style("color",COLORS.ARCHEO_TEXT_COLOR);
+                this.setAllTextboxColors(COLORS.ARCHEO_TEXT_COLOR);
                 this.speak_sound = sounds.blip_f;
+                this.name.box.html("The Archeologist");
                 this.moveArrow("left");
+                this.moveName("left");
+
                 this.heads.plumed.box.removeClass("inactive_portrait");
                 this.heads.tattoo.box.addClass("inactive_portrait");
-
             break;
             case "DESIGNER":
-                this.box.style("color",COLORS.DESIGNER_TEXT_COLOR);
-                this.speak_sound = sounds.blip_m;
+                this.setAllTextboxColors(COLORS.DESIGNER_TEXT_COLOR);
+                this.speak_sound = sounds.blip_f;
+                this.name.box.html("The Designer");
                 this.moveArrow("right");
+                this.moveName("right");
+
                 this.heads.tattoo.box.removeClass("inactive_portrait");
                 this.heads.plumed.box.addClass("inactive_portrait");
             break;
 
             default:
-                this.heads.plumed.box.addClass("inactive_portrait");
-                this.heads.tattoo.box.addClass("inactive_portrait");
-                this.box.style("color",COLORS.DEFAULT_TEXT_COLOR);
+                this.setAllTextboxColors(COLORS.DEFAULT_TEXT_COLOR);
                 this.speak_sound = sounds.letter;
                 this.moveArrow("none");
+                this.moveName("none");
+
+                this.heads.plumed.box.addClass("inactive_portrait");
+                this.heads.tattoo.box.addClass("inactive_portrait");
             break;
         }
     }
 
+    setAllTextboxColors(color)
+    {
+        this.name.box.style("background-color", color);
+        this.arrow.box.style("border-bottom-color", color);
+        this.box.style("border-color", color);
+        this.box.style("color",color);
+    }
+
     moveArrow(position)
     {
+        
         switch(position)
         {
             case "left":
             this.arrow.box.show();
             //this.arrow.reposition(15);
+            // this.arrow.reposition(12);
             this.arrow.reposition(12);
             break;
 
@@ -222,7 +250,28 @@ class Textbox extends HTMLSprite
                 this.arrow.box.hide();
             break;
         }
-        
+    }
+
+    moveName(position)
+    {
+        this.name.box.removeClass("textbox_name_aligned_left");
+        switch(position)
+        {
+            case "left":
+            this.name.box.show();
+            this.name.reposition(11);
+            break;
+
+            case "right":
+            this.name.box.show();
+            this.name.reposition(88);
+            this.name.box.addClass("textbox_name_aligned_left");
+            break;
+
+            case "none":
+                this.name.box.hide();
+            break;
+        }
     }
 
 }

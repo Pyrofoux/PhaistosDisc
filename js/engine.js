@@ -13,7 +13,7 @@ const img_disc = ["A_disc", "A_cells", "A_symbols", "A_surface"];
 const A_width = 1883;
 const A_height = 1929
 
-const img_symbols = ["PEDESTRIAN","BEE","SHIP","SHIELD","ROSETTE","ARROW","BULLS_LEG"];
+const img_symbols = ["BULL","EAGLE","CAPTIVE","PEDESTRIAN","BEE","SHIP","SHIELD","ROSETTE","ARROW","BULLS_LEG"];
 
 let pixel_density;
 let screen;
@@ -34,11 +34,14 @@ async function preload()
   });
 
 
+  const slide_picture_names = ["blank", "blank_bg", "blank_front", "disc", "playtest", "theseus_and_minotaur", "oracle"]
   spr.slides = {}; // slide pictures
-  spr.slides.blank_bg     = loadImage("img/slides/blank_slide_bg.png");
-  spr.slides.blank_front  = loadImage("img/slides/blank_slide_front.png");
-  spr.slides.blank        = loadImage("img/slides/blank_slide.png");
-  spr.slides.disc         = loadImage("img/slides/slide_disc.png");
+  slide_picture_names.forEach(name => spr.slides[name] = loadImage(`img/slides/${name}.png`))
+  // spr.slides.blank_bg     = loadImage("img/slides/blank_slide_bg.png");
+  // spr.slides.blank_front  = loadImage("img/slides/blank_slide_front.png");
+  // spr.slides.blank        = loadImage("img/slides/blank_slide.png");
+  // spr.slides.disc         = loadImage("img/slides/slide_disc.png");
+
 
   spr.palace_map = loadImage("img/palace/palace_map.png");
 
@@ -112,7 +115,8 @@ async function setup()
     "load":new LoadScreen("load"),
     "map":new MapScreen("map"),
     "workshop":new WorkshopScreen("workshop"),
-    "game1":new Game1Screen("game1"),
+    "game_defeat":new GameDefeat("game_defeat"),
+    "game_divine": typeof GameDivine != "undefined" ? new GameDivine("game_divine") : new GameDefeat("game_defeat"),
   }
 
   // text font when writing on canvas
@@ -122,17 +126,29 @@ async function setup()
   
 
   changeScreen(screens.load);
+
+  // Loads all sheets, either locally or from the internet
   await loadAllSheets();
+
+  // Puts disc regions into cache
+  for(var i = 0; i < 31; i++)
+    {
+      colorCell(i, "white");
+    }
+
+
   textbox.set("");
 
   //changeScreen(screens.workshop);
   //changeScreen(screens.start); // the one to start with in prod
   
-  //changeScreen(screens.conversation); // the one to start with in prod
+  changeScreen(screens.conversation); // the one to start with in prod
   //playScene("OPENING_DISCUSSION_ENDING_1")
   //playScene("MINDPALACE_OPENING");
 
-  changeScreen(screens.game1);
+   playScene("INDIEMASH_DISCUSSION")
+
+  //changeScreen(screens.game1);
 
   
   // create links to debug scenes

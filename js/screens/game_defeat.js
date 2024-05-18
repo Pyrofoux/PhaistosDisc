@@ -1,5 +1,5 @@
 
-class Game1Screen extends Screen
+class GameDefeat extends Screen
 {
     init()
     {
@@ -19,6 +19,7 @@ class Game1Screen extends Screen
 
         // visual GUI state
         this.vstate = {
+            pixels_changed:false,
             highlighted_cell:-1,
             highlighted_symbol:-1,
             blocked_cells:[],
@@ -28,10 +29,20 @@ class Game1Screen extends Screen
         // sprites for tokens and dice
         this.tokens = {};
         this.dice = {}
+    }
 
+    async onEnter()
+    {
         this.createInitialSprite();
         this.redrawDiscImage(true);
+        await this.slideIn(); // slide in effect
     }
+
+    onLeave()
+    {
+        this.deleteSprites();
+    }
+
 
     disc2screen(coords)
     {
@@ -107,7 +118,7 @@ class Game1Screen extends Screen
             dice.event("click", () => 
                 {
                     if(dice.clickable) dice.shakeToFace([int(random(1,7)), int(random(1,7))]);
-                    console.log(dice.clickable)
+                    dice.setClickable(true);
                 });
             dice.setClickable(true);
 
@@ -115,8 +126,22 @@ class Game1Screen extends Screen
         }
     }
 
+    deleteSprites()
+    {
+        this.tokens.hero.remove();
+        this.tokens.taur.remove();
+        this.dice.white.remove();
+        this.dice.black.remove();
+    }
+
     draw()
     {
+        if(this.vstate.pixels_changed)
+        {
+            this.redrawDiscImage();
+            this.vstate.pixels_changed = false;
+        }
+
         background("#212121")
         image(disc_cvs, this.disc.x, this.disc.y);
     }
@@ -137,7 +162,7 @@ class Game1Screen extends Screen
 
         if(pixels_changed)
         {
-            this.redrawDiscImage();
+            this.vstate.pixels_changed = true;
         }
     }
 
@@ -202,13 +227,10 @@ class Game1Screen extends Screen
             let start_cell = this.state.taur;
             this.state.taur = semantic.cell;
             let end_cell = this.state.taur;
-            await this.moveToken(this.tokens.taur, start_cell, end_cell)
+            await this.moveToken(this.tokens.taur, start_cell, end_cell);
+            await waitFrames(1); // to avoid jittery frame
+            this.updateVisualState({blocked_cells: this.getBlockedCells()});
         }
-
-        this.updateVisualState({blocked_cells: this.getBlockedCells()});
-
-        // redraw image disc after click
-        this.redrawDiscImage();
     }
 
     onMouseMove(mx,my)

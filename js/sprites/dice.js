@@ -125,6 +125,12 @@ class HTMLSpriteDicePair
         this.dice[1].event(...args);
     }
 
+    remove()
+    {
+        this.dice[0].remove();
+        this.dice[1].remove();
+    }
+
     get clickable() {
         return this.dice[0].clickable && this.dice[1].clickable;
     }
